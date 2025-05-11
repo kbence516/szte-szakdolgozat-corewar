@@ -1,4 +1,4 @@
-﻿namespace CoreWar.models {
+﻿namespace CoreWar {
     public class IncompleteInstruction {
 
         public Instruction? Instruction {
