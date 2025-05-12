@@ -6,7 +6,8 @@
                 Console.Write($"Kérem {i + 1}. játékos programjának fájlnevét! ");
                 string? path = Console.ReadLine();
                 if (path != null) {
-                    Player p = new Player(Path.Combine("../../../", path));
+                    int firstProcessStart = RedcodeInputLoader.LoadFromFile(Path.Combine("../../../", path));
+                    Player p = new($"{i + 1}. játékos", firstProcessStart, vm.MaxProcesses);
                 }
             }
             vm.Play();
