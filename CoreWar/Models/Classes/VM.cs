@@ -17,8 +17,22 @@
             return instance;
         }
 
+        public static void ResetInstance() {
+            instance = null;
+        }
+
+        private static int ModMemorySize(int value) {
+            while (value < 0) {
+                value += instance.MemorySize;
+            }
+            return value % instance.MemorySize;
+        }
+
         private VM(int memorySize, int maxCycles, int warriors, int maxProcesses) {
             Players = new(warriors);
+            if (memorySize <= 0) {
+                throw new ArgumentException("Adj meg pozitív memóriaméretet!");
+            }
             MemorySize = memorySize;
             Memory = Enumerable.Range(0, MemorySize).Select(_ => new Instruction()).ToArray();
             MaxProcesses = maxProcesses;
@@ -61,9 +75,9 @@
                 if (address + CurrentInstructionAddress < 0) {
                     address += MemorySize;
                 }
-                return Memory[(address + CurrentInstructionAddress) % MemorySize];
+                return Memory[ModMemorySize(address + CurrentInstructionAddress)];
             } else {
-                return Memory[address % MemorySize];
+                return Memory[ModMemorySize(address)];
             }
         }
 
@@ -78,148 +92,149 @@
         public int[] ExecuteInstruction(int memoryAddress) {
             CurrentInstructionAddress = memoryAddress;
             Instruction currentInstruction = InstructionAt(memoryAddress, false);
+            Instruction source = InstructionAt(currentInstruction.GetA(), true);
+            Instruction target = InstructionAt(currentInstruction.GetB(), true);
             switch (currentInstruction.OpCode) {
                 case OpCode.DAT:
                     return [-1];
                 case OpCode.MOV:
-                    Instruction targetInstruction = InstructionAt(currentInstruction.GetA(), true);
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value = targetInstruction.OpA.Value;
+                            target.OpA.Copy(source.OpA);
                             break;
                         case OpModifier.B:
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value = targetInstruction.OpB.Value;
+                            target.OpB.Copy(source.OpB);
                             break;
                         case OpModifier.AB:
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value = targetInstruction.OpA.Value;
+                            target.OpB.Copy(source.OpA);
                             break;
                         case OpModifier.BA:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value = targetInstruction.OpB.Value;
+                            target.OpA.Copy(source.OpB);
                             break;
                         case OpModifier.F:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value = targetInstruction.OpA.Value;
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value = targetInstruction.OpB.Value;
+                            target.OpA.Value = source.OpA.Value;
+                            target.OpB.Value = source.OpB.Value;
                             break;
                         case OpModifier.X:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value = targetInstruction.OpB.Value;
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value = targetInstruction.OpA.Value;
+                            target.OpB.Copy(source.OpA);
+                            target.OpA.Copy(source.OpB);
                             break;
                         case OpModifier.I:
-                            InstructionAt(currentInstruction.GetB(), true).Copy(targetInstruction);
+                            target.Copy(source);
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.ADD:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value += InstructionAt(currentInstruction.GetA(), true).OpA.Value;
+                            target.OpA.Value += source.OpA.Value;
                             break;
                         case OpModifier.B:
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value += InstructionAt(currentInstruction.GetA(), true).OpB.Value;
+                            target.OpB.Value += source.OpB.Value;
                             break;
                         case OpModifier.AB:
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value += InstructionAt(currentInstruction.GetA(), true).OpA.Value;
+                            target.OpB.Value += source.OpA.Value;
                             break;
                         case OpModifier.BA:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value += InstructionAt(currentInstruction.GetA(), true).OpB.Value;
+                            target.OpA.Value += source.OpB.Value;
                             break;
                         case OpModifier.F:
                         case OpModifier.I:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value += InstructionAt(currentInstruction.GetA(), true).OpA.Value;
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value += InstructionAt(currentInstruction.GetA(), true).OpB.Value;
+                            target.OpA.Value += source.OpA.Value;
+                            target.OpB.Value += source.OpB.Value;
                             break;
                         case OpModifier.X:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value += InstructionAt(currentInstruction.GetA(), true).OpB.Value;
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value += InstructionAt(currentInstruction.GetA(), true).OpA.Value;
+                            target.OpA.Value += source.OpB.Value;
+                            target.OpB.Value += source.OpA.Value;
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.SUB:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value - InstructionAt(currentInstruction.GetB(), true).OpA.Value;
+                            target.OpA.Value -= source.OpA.Value;
                             break;
                         case OpModifier.B:
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value - InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                            target.OpB.Value -= source.OpB.Value;
                             break;
                         case OpModifier.AB:
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value - InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                            target.OpB.Value -= source.OpA.Value;
                             break;
                         case OpModifier.BA:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value - InstructionAt(currentInstruction.GetB(), true).OpA.Value;
+                            target.OpA.Value -= source.OpB.Value;
                             break;
                         case OpModifier.F:
                         case OpModifier.I:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value - InstructionAt(currentInstruction.GetB(), true).OpA.Value;
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value - InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                            target.OpA.Value -= source.OpA.Value;
+                            target.OpB.Value -= source.OpB.Value;
                             break;
                         case OpModifier.X:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value - InstructionAt(currentInstruction.GetB(), true).OpA.Value;
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value - InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                            target.OpA.Value -= source.OpB.Value;
+                            target.OpB.Value -= source.OpA.Value;
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.MUL:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value *= InstructionAt(currentInstruction.GetA(), true).OpA.Value;
+                            target.OpA.Value *= source.OpA.Value;
                             break;
                         case OpModifier.B:
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value *= InstructionAt(currentInstruction.GetA(), true).OpB.Value;
+                            target.OpB.Value *= source.OpB.Value;
                             break;
                         case OpModifier.AB:
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value *= InstructionAt(currentInstruction.GetA(), true).OpA.Value;
+                            target.OpB.Value *= source.OpA.Value;
                             break;
                         case OpModifier.BA:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value *= InstructionAt(currentInstruction.GetA(), true).OpB.Value;
+                            target.OpA.Value *= source.OpB.Value;
                             break;
                         case OpModifier.F:
                         case OpModifier.I:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value *= InstructionAt(currentInstruction.GetA(), true).OpA.Value;
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value *= InstructionAt(currentInstruction.GetA(), true).OpB.Value;
+                            target.OpA.Value *= source.OpA.Value;
+                            target.OpB.Value *= source.OpB.Value;
                             break;
                         case OpModifier.X:
-                            InstructionAt(currentInstruction.GetB(), true).OpA.Value *= InstructionAt(currentInstruction.GetA(), true).OpB.Value;
-                            InstructionAt(currentInstruction.GetB(), true).OpB.Value *= InstructionAt(currentInstruction.GetA(), true).OpA.Value;
+                            target.OpA.Value *= source.OpB.Value;
+                            target.OpB.Value *= source.OpA.Value;
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.DIV:
                     try {
                         switch (currentInstruction.Modifier) {
                             case OpModifier.A:
-                                InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value / InstructionAt(currentInstruction.GetB(), true).OpA.Value;
+                                target.OpA.Value /= source.OpA.Value;
                                 break;
                             case OpModifier.B:
-                                InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value / InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                                target.OpB.Value /= source.OpB.Value;
                                 break;
                             case OpModifier.AB:
-                                InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value / InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                                target.OpB.Value /= source.OpA.Value;
                                 break;
                             case OpModifier.BA:
-                                InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value / InstructionAt(currentInstruction.GetB(), true).OpA.Value;
+                                target.OpA.Value /= source.OpB.Value;
                                 break;
                             case OpModifier.F:
                             case OpModifier.I:
-                                InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value / InstructionAt(currentInstruction.GetB(), true).OpA.Value;
-                                InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value / InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                                target.OpA.Value /= source.OpA.Value;
+                                target.OpB.Value /= source.OpB.Value;
                                 break;
                             case OpModifier.X:
-                                InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value / InstructionAt(currentInstruction.GetB(), true).OpA.Value;
-                                InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value / InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                                target.OpA.Value /= source.OpB.Value;
+                                target.OpB.Value /= source.OpA.Value;
                                 break;
                             default:
-                                throw new Exception("Helytelen módosító");
+                                throw new ArgumentException("Helytelen módosító");
                         }
-                        return [++memoryAddress];
+                        return [ModMemorySize(++memoryAddress)];
                     } catch (DivideByZeroException) {
                         return [-1];
                     }
@@ -227,226 +242,237 @@
                     try {
                         switch (currentInstruction.Modifier) {
                             case OpModifier.A:
-                                InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value % InstructionAt(currentInstruction.GetB(), true).OpA.Value;
+                                target.OpA.Value %= source.OpA.Value;
                                 break;
                             case OpModifier.B:
-                                InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value % InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                                target.OpB.Value %= source.OpB.Value;
                                 break;
                             case OpModifier.AB:
-                                InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value % InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                                target.OpB.Value %= source.OpA.Value;
                                 break;
                             case OpModifier.BA:
-                                InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value % InstructionAt(currentInstruction.GetB(), true).OpA.Value;
+                                target.OpA.Value %= source.OpB.Value;
                                 break;
                             case OpModifier.F:
                             case OpModifier.I:
-                                InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value % InstructionAt(currentInstruction.GetB(), true).OpA.Value;
-                                InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value % InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                                target.OpA.Value %= source.OpA.Value;
+                                target.OpB.Value %= source.OpB.Value;
                                 break;
                             case OpModifier.X:
-                                InstructionAt(currentInstruction.GetB(), true).OpA.Value = InstructionAt(currentInstruction.GetA(), true).OpB.Value % InstructionAt(currentInstruction.GetB(), true).OpA.Value;
-                                InstructionAt(currentInstruction.GetB(), true).OpB.Value = InstructionAt(currentInstruction.GetA(), true).OpA.Value % InstructionAt(currentInstruction.GetB(), true).OpB.Value;
+                                target.OpA.Value %= source.OpB.Value;
+                                target.OpB.Value %= source.OpA.Value;
                                 break;
                             default:
-                                throw new Exception("Helytelen módosító");
+                                throw new ArgumentException("Helytelen módosító");
                         }
-                        return [++memoryAddress];
+                        return [ModMemorySize(++memoryAddress)];
                     } catch (DivideByZeroException) {
                         return [-1];
                     }
                 case OpCode.JMP:
-                    return [memoryAddress + currentInstruction.GetA()];
+                    return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                 case OpCode.JMZ:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.BA:
                         case OpModifier.A:
-                            if (InstructionAt(currentInstruction.GetB(), true).OpA.Value == 0) {
-                                return [memoryAddress + currentInstruction.GetA()];
+                            if (target.OpA.Value == 0) {
+                                return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                             }
                             break;
                         case OpModifier.AB:
                         case OpModifier.B:
-                            if (InstructionAt(currentInstruction.GetB(), true).OpB.Value == 0) {
-                                return [memoryAddress + currentInstruction.GetA()];
+                            if (target.OpB.Value == 0) {
+                                return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                             }
                             break;
                         case OpModifier.I:
                         case OpModifier.X:
                         case OpModifier.F:
-                            if (InstructionAt(currentInstruction.GetB(), true).OpA.Value == 0 && InstructionAt(currentInstruction.GetB(), true).OpB.Value == 0) {
-                                return [memoryAddress + currentInstruction.GetA()];
+                            if (target.OpA.Value == 0 && target.OpB.Value == 0) {
+                                return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                             }
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.JMN:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.BA:
                         case OpModifier.A:
-                            if (InstructionAt(currentInstruction.GetB(), true).OpA.Value != 0) {
-                                return [memoryAddress + currentInstruction.GetA()];
+                            if (target.OpA.Value != 0) {
+                                return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                             }
                             break;
                         case OpModifier.AB:
                         case OpModifier.B:
-                            if (InstructionAt(currentInstruction.GetB(), true).OpB.Value != 0) {
-                                return [memoryAddress + currentInstruction.GetA()];
+                            if (target.OpB.Value != 0) {
+                                return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                             }
                             break;
                         case OpModifier.I:
                         case OpModifier.X:
                         case OpModifier.F:
-                            if (InstructionAt(currentInstruction.GetB(), true).OpA.Value != 0 && InstructionAt(currentInstruction.GetB(), true).OpB.Value != 0) {
-                                return [memoryAddress + currentInstruction.GetA()];
+                            if (target.OpA.Value != 0 || target.OpB.Value != 0) {
+                                return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                             }
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.DJN:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.BA:
                         case OpModifier.A:
-                            if (--InstructionAt(currentInstruction.GetB(), true).OpA.Value != 0) {
-                                return [memoryAddress + currentInstruction.GetA()];
+                            if (--target.OpA.Value != 0) {
+                                return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                             }
                             break;
                         case OpModifier.AB:
                         case OpModifier.B:
-                            if (--InstructionAt(currentInstruction.GetB(), true).OpB.Value != 0) {
-                                return [memoryAddress + currentInstruction.GetA()];
+                            if (--target.OpB.Value != 0) {
+                                return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                             }
                             break;
                         case OpModifier.I:
                         case OpModifier.X:
                         case OpModifier.F:
-                            if (--InstructionAt(currentInstruction.GetB(), true).OpA.Value != 0 && --InstructionAt(currentInstruction.GetB(), true).OpB.Value != 0) {
-                                return [memoryAddress + currentInstruction.GetA()];
+                            // a lusta kiértékelést elkerülendő, így biztosan csökken mindkét érték
+                            --target.OpA.Value;
+                            --target.OpB.Value;
+                            if (target.OpA.Value != 0 || target.OpB.Value != 0) {
+                                return [ModMemorySize(memoryAddress + currentInstruction.GetA())];
                             }
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.SPL:
-                    return [memoryAddress + currentInstruction.GetA(), memoryAddress + 1];
+                    return [ModMemorySize(memoryAddress + 1), ModMemorySize(memoryAddress + currentInstruction.GetA())];
                 case OpCode.CMP:
                 case OpCode.SEQ:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value == InstructionAt(currentInstruction.GetB(), true).OpA.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value == target.OpA.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.B:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpB.Value == InstructionAt(currentInstruction.GetB(), true).OpB.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpB.Value == target.OpB.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.AB:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value == InstructionAt(currentInstruction.GetB(), true).OpB.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value == target.OpB.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.BA:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpB.Value == InstructionAt(currentInstruction.GetB(), true).OpA.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpB.Value == target.OpA.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.F:
+                            if (source.OpA.Value == target.OpA.Value && source.OpB.Value == target.OpB.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
+                            }
+                            break;
                         case OpModifier.I:
-                            if (InstructionAt(currentInstruction.GetA(), true).Equals(InstructionAt(currentInstruction.GetB(), true).OpA.Value)) {
-                                return [memoryAddress + 2];
+                            if (source.Equals(target)) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.X:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value == InstructionAt(currentInstruction.GetB(), true).OpB.Value && InstructionAt(currentInstruction.GetA(), true).OpB.Value == InstructionAt(currentInstruction.GetB(), true).OpA.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value == target.OpB.Value && source.OpB.Value == target.OpA.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.SNE:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value != InstructionAt(currentInstruction.GetB(), true).OpA.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value != target.OpA.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.B:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpB.Value != InstructionAt(currentInstruction.GetB(), true).OpB.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpB.Value != target.OpB.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.AB:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value != InstructionAt(currentInstruction.GetB(), true).OpB.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value != target.OpB.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.BA:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpB.Value != InstructionAt(currentInstruction.GetB(), true).OpA.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpB.Value != target.OpA.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.F:
+                            if (source.OpA.Value != target.OpA.Value || source.OpB.Value != target.OpB.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
+                            }
+                            break;
                         case OpModifier.I:
-                            if (!InstructionAt(currentInstruction.GetA(), true).Equals(InstructionAt(currentInstruction.GetB(), true).OpA.Value)) {
-                                return [memoryAddress + 2];
+                            if (!source.Equals(target)) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.X:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value != InstructionAt(currentInstruction.GetB(), true).OpB.Value && InstructionAt(currentInstruction.GetA(), true).OpB.Value != InstructionAt(currentInstruction.GetB(), true).OpA.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value != target.OpB.Value || source.OpB.Value != target.OpA.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.SLT:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value < InstructionAt(currentInstruction.GetB(), true).OpA.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value < target.OpA.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.B:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpB.Value < InstructionAt(currentInstruction.GetB(), true).OpB.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpB.Value < target.OpB.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.AB:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value < InstructionAt(currentInstruction.GetB(), true).OpB.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value < target.OpB.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.BA:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpB.Value < InstructionAt(currentInstruction.GetB(), true).OpA.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpB.Value < target.OpA.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.I:
                         case OpModifier.F:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value < InstructionAt(currentInstruction.GetB(), true).OpA.Value && InstructionAt(currentInstruction.GetA(), true).OpB.Value < InstructionAt(currentInstruction.GetB(), true).OpB.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value < target.OpA.Value && source.OpB.Value < target.OpB.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         case OpModifier.X:
-                            if (InstructionAt(currentInstruction.GetA(), true).OpA.Value < InstructionAt(currentInstruction.GetB(), true).OpB.Value && InstructionAt(currentInstruction.GetA(), true).OpB.Value < InstructionAt(currentInstruction.GetB(), true).OpA.Value) {
-                                return [memoryAddress + 2];
+                            if (source.OpA.Value < target.OpB.Value && source.OpB.Value < target.OpA.Value) {
+                                return [ModMemorySize(memoryAddress + 2)];
                             }
                             break;
                         default:
-                            throw new Exception("Helytelen módosító");
+                            throw new ArgumentException("Helytelen módosító");
                     }
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 case OpCode.NOP:
-                    return [++memoryAddress];
+                    return [ModMemorySize(++memoryAddress)];
                 default:
                     throw new InvalidOperationException();
             }

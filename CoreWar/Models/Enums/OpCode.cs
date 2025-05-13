@@ -10,7 +10,7 @@ namespace CoreWar {
         JMP,            // feltétel nélküli ugrás
         JMZ,            // ugrás, ha az eredmény 0
         JMN,            // ugrás, ha az eredmény nem 0
-        DJN,            // csökkentés 1-gyel, majd ugrás, ha az eredmény 0
+        DJN,            // csökkentés 1-gyel, majd ugrás, ha az eredmény nem 0
         CMP,            // ugyanaz, mint az SEQ, csak ezt nem érdemes használni
         SLT,            // következő ugrása, ha kisebb
         SPL,            // új processzus indítása
