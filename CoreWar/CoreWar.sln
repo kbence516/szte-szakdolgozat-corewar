@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreWar", "CoreWar.csproj", "{06CA3592-9A54-4304-9AAC-BE19846DE0C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreWarTests", "..\CoreWarTests\CoreWarTests.csproj", "{EB5A5145-AFF7-43A7-B43A-B99C73B3971F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{06CA3592-9A54-4304-9AAC-BE19846DE0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06CA3592-9A54-4304-9AAC-BE19846DE0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06CA3592-9A54-4304-9AAC-BE19846DE0C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB5A5145-AFF7-43A7-B43A-B99C73B3971F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB5A5145-AFF7-43A7-B43A-B99C73B3971F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB5A5145-AFF7-43A7-B43A-B99C73B3971F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB5A5145-AFF7-43A7-B43A-B99C73B3971F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6051500B-7A3D-4FDD-88EC-838AC2E4D281}
 	EndGlobalSection
 EndGlobal

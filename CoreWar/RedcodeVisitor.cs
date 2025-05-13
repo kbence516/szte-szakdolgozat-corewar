@@ -106,7 +106,7 @@ namespace CoreWar {
                         if (adA == AddressingMode.IMMEDIATE) {
                             modifier = OpModifier.AB;
                         } else if (adB == AddressingMode.IMMEDIATE) {
-                            modifier = OpModifier.BA;
+                            modifier = OpModifier.B;
                         } else {
                             modifier = OpModifier.I;
                         }
@@ -119,7 +119,7 @@ namespace CoreWar {
                         if (adA == AddressingMode.IMMEDIATE) {
                             modifier = OpModifier.AB;
                         } else if (adB == AddressingMode.IMMEDIATE) {
-                            modifier = OpModifier.BA;
+                            modifier = OpModifier.B;
                         } else {
                             modifier = OpModifier.F;
                         }
