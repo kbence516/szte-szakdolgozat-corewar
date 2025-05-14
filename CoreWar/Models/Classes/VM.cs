@@ -21,7 +21,7 @@
             instance = null;
         }
 
-        private static int ModMemorySize(int value) {
+        public int ModMemorySize(int value) {
             while (value < 0) {
                 value += instance.MemorySize;
             }
@@ -129,52 +129,53 @@
                 case OpCode.ADD:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            target.OpA.Value += source.OpA.Value;
+                            target.OpA.Value = ModMemorySize(source.OpA.Value + target.OpA.Value);
                             break;
                         case OpModifier.B:
-                            target.OpB.Value += source.OpB.Value;
+                            target.OpB.Value = ModMemorySize(source.OpB.Value + target.OpB.Value);
                             break;
                         case OpModifier.AB:
-                            target.OpB.Value += source.OpA.Value;
+                            target.OpB.Value = ModMemorySize(source.OpA.Value + target.OpB.Value);
                             break;
                         case OpModifier.BA:
-                            target.OpA.Value += source.OpB.Value;
+                            target.OpA.Value = ModMemorySize(source.OpA.Value + target.OpB.Value);
                             break;
                         case OpModifier.F:
                         case OpModifier.I:
-                            target.OpA.Value += source.OpA.Value;
-                            target.OpB.Value += source.OpB.Value;
+                            target.OpA.Value = ModMemorySize(source.OpA.Value + target.OpA.Value);
+                            target.OpB.Value = ModMemorySize(source.OpB.Value + target.OpB.Value);
                             break;
                         case OpModifier.X:
-                            target.OpA.Value += source.OpB.Value;
-                            target.OpB.Value += source.OpA.Value;
+                            target.OpA.Value = ModMemorySize(source.OpA.Value + target.OpB.Value);
+                            target.OpB.Value = ModMemorySize(source.OpB.Value + target.OpA.Value);
                             break;
                         default:
                             throw new ArgumentException("Helytelen módosító");
                     }
                     return [ModMemorySize(++memoryAddress)];
+
                 case OpCode.SUB:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            target.OpA.Value -= source.OpA.Value;
+                            target.OpA.Value = ModMemorySize(source.OpA.Value - target.OpA.Value);
                             break;
                         case OpModifier.B:
-                            target.OpB.Value -= source.OpB.Value;
+                            target.OpB.Value = ModMemorySize(source.OpB.Value - target.OpB.Value);
                             break;
                         case OpModifier.AB:
-                            target.OpB.Value -= source.OpA.Value;
+                            target.OpB.Value = ModMemorySize(source.OpA.Value - target.OpB.Value);
                             break;
                         case OpModifier.BA:
-                            target.OpA.Value -= source.OpB.Value;
+                            target.OpA.Value = ModMemorySize(source.OpB.Value - target.OpA.Value);
                             break;
                         case OpModifier.F:
                         case OpModifier.I:
-                            target.OpA.Value -= source.OpA.Value;
-                            target.OpB.Value -= source.OpB.Value;
+                            target.OpA.Value = ModMemorySize(source.OpA.Value - target.OpA.Value);
+                            target.OpB.Value = ModMemorySize(source.OpB.Value - target.OpB.Value);
                             break;
                         case OpModifier.X:
-                            target.OpA.Value -= source.OpB.Value;
-                            target.OpB.Value -= source.OpA.Value;
+                            target.OpA.Value = ModMemorySize(source.OpB.Value - target.OpA.Value);
+                            target.OpB.Value = ModMemorySize(source.OpA.Value - target.OpB.Value);
                             break;
                         default:
                             throw new ArgumentException("Helytelen módosító");
@@ -183,25 +184,25 @@
                 case OpCode.MUL:
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            target.OpA.Value *= source.OpA.Value;
+                            target.OpA.Value = ModMemorySize(source.OpA.Value * target.OpA.Value);
                             break;
                         case OpModifier.B:
-                            target.OpB.Value *= source.OpB.Value;
+                            target.OpB.Value = ModMemorySize(source.OpB.Value * target.OpB.Value);
                             break;
                         case OpModifier.AB:
-                            target.OpB.Value *= source.OpA.Value;
+                            target.OpB.Value = ModMemorySize(source.OpA.Value * target.OpB.Value);
                             break;
                         case OpModifier.BA:
-                            target.OpA.Value *= source.OpB.Value;
+                            target.OpA.Value = ModMemorySize(source.OpB.Value * target.OpA.Value);
                             break;
                         case OpModifier.F:
                         case OpModifier.I:
-                            target.OpA.Value *= source.OpA.Value;
-                            target.OpB.Value *= source.OpB.Value;
+                            target.OpA.Value = ModMemorySize(source.OpA.Value * target.OpA.Value);
+                            target.OpB.Value = ModMemorySize(source.OpB.Value * target.OpB.Value);
                             break;
                         case OpModifier.X:
-                            target.OpA.Value *= source.OpB.Value;
-                            target.OpB.Value *= source.OpA.Value;
+                            target.OpA.Value = ModMemorySize(source.OpB.Value * target.OpA.Value);
+                            target.OpB.Value = ModMemorySize(source.OpA.Value * target.OpB.Value);
                             break;
                         default:
                             throw new ArgumentException("Helytelen módosító");
@@ -211,25 +212,25 @@
                     try {
                         switch (currentInstruction.Modifier) {
                             case OpModifier.A:
-                                target.OpA.Value /= source.OpA.Value;
+                                target.OpA.Value = ModMemorySize(source.OpA.Value / target.OpA.Value);
                                 break;
                             case OpModifier.B:
-                                target.OpB.Value /= source.OpB.Value;
+                                target.OpB.Value = ModMemorySize(source.OpB.Value / target.OpB.Value);
                                 break;
                             case OpModifier.AB:
-                                target.OpB.Value /= source.OpA.Value;
+                                target.OpB.Value = ModMemorySize(source.OpA.Value / target.OpB.Value);
                                 break;
                             case OpModifier.BA:
-                                target.OpA.Value /= source.OpB.Value;
+                                target.OpA.Value = ModMemorySize(source.OpB.Value / target.OpA.Value);
                                 break;
                             case OpModifier.F:
                             case OpModifier.I:
-                                target.OpA.Value /= source.OpA.Value;
-                                target.OpB.Value /= source.OpB.Value;
+                                target.OpA.Value = ModMemorySize(source.OpA.Value / target.OpA.Value);
+                                target.OpB.Value = ModMemorySize(source.OpB.Value / target.OpB.Value);
                                 break;
                             case OpModifier.X:
-                                target.OpA.Value /= source.OpB.Value;
-                                target.OpB.Value /= source.OpA.Value;
+                                target.OpA.Value = ModMemorySize(source.OpB.Value / target.OpA.Value);
+                                target.OpB.Value = ModMemorySize(source.OpA.Value / target.OpB.Value);
                                 break;
                             default:
                                 throw new ArgumentException("Helytelen módosító");
@@ -242,25 +243,25 @@
                     try {
                         switch (currentInstruction.Modifier) {
                             case OpModifier.A:
-                                target.OpA.Value %= source.OpA.Value;
+                                target.OpA.Value = ModMemorySize(source.OpA.Value % target.OpA.Value);
                                 break;
                             case OpModifier.B:
-                                target.OpB.Value %= source.OpB.Value;
+                                target.OpB.Value = ModMemorySize(source.OpB.Value % target.OpB.Value);
                                 break;
                             case OpModifier.AB:
-                                target.OpB.Value %= source.OpA.Value;
+                                target.OpB.Value = ModMemorySize(source.OpA.Value % target.OpB.Value);
                                 break;
                             case OpModifier.BA:
-                                target.OpA.Value %= source.OpB.Value;
+                                target.OpA.Value = ModMemorySize(source.OpB.Value % target.OpA.Value);
                                 break;
                             case OpModifier.F:
                             case OpModifier.I:
-                                target.OpA.Value %= source.OpA.Value;
-                                target.OpB.Value %= source.OpB.Value;
+                                target.OpA.Value = ModMemorySize(source.OpA.Value % target.OpA.Value);
+                                target.OpB.Value = ModMemorySize(source.OpB.Value % target.OpB.Value);
                                 break;
                             case OpModifier.X:
-                                target.OpA.Value %= source.OpB.Value;
-                                target.OpB.Value %= source.OpA.Value;
+                                target.OpA.Value = ModMemorySize(source.OpB.Value % target.OpA.Value);
+                                target.OpB.Value = ModMemorySize(source.OpA.Value % target.OpB.Value);
                                 break;
                             default:
                                 throw new ArgumentException("Helytelen módosító");

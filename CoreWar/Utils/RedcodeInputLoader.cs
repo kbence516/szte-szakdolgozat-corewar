@@ -25,7 +25,11 @@ namespace CoreWar {
             RedcodeVisitor visitor = new();
 
             var (process, firstInstructionOffset) = ((List<Instruction>, int))visitor.VisitProgram(context);
-            int firstInstructionStart = (random.Next(vm.Memory.Length) + firstInstructionOffset) % vm.Memory.Length;          // TODO: leellenõrizni, hogy van-e már ott valami a memóriában
+            process.ForEach((p) => {
+                p.OpA.Value = vm.ModMemorySize(p.OpA.Value);
+                p.OpB.Value = vm.ModMemorySize(p.OpB.Value);
+            });
+            int firstInstructionStart = vm.ModMemorySize(random.Next(vm.Memory.Length) + firstInstructionOffset);          // TODO: leellenõrizni, hogy van-e már ott valami a memóriában
             vm.LoadIntoMemory(process, firstInstructionStart);
 
             return firstInstructionStart;

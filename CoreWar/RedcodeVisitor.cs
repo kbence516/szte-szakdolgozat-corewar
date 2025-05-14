@@ -2,15 +2,15 @@ using Antlr4.Runtime.Misc;
 
 namespace CoreWar {
     public class RedcodeVisitor : RedcodeBaseVisitor<object> {
-        Dictionary<string, int> labels = [];                         // c�mk�k neve �s sorsz�ma
-        List<IncompleteInstruction> incompleteInstructions = [];     // hib�s utas�t�sok
+        Dictionary<string, int> labels = [];                         // címkék neve és sorsz�ma
+        List<IncompleteInstruction> incompleteInstructions = [];     // hibás utasítások
         IncompleteInstruction? orgInstruction = null;
         int processStartOffset = 0, programLineNumber = 0;
         bool reachedEnd = false, lookingForFirstInstr = false;
         public override object VisitProgram([NotNull] RedcodeParser.ProgramContext context) {
-            List<Instruction> process = [];                         // visszat�r�si �rt�k els� param�tere
+            List<Instruction> process = [];                         // visszatérési érték első paramétere
             for (programLineNumber = 0; programLineNumber < context.line().Length && !reachedEnd; ++programLineNumber) {
-                if (context.line()[programLineNumber].GetText() == "\r\n" || context.line()[programLineNumber].comment() != null) {               // �res sor vagy komment a sor elej�n
+                if (context.line()[programLineNumber].GetText() == "\r\n" || context.line()[programLineNumber].comment() != null) {               // üres sor vagy komment a sor elején
                     continue;
                 }
                 Instruction? instruction = VisitInstruction(context.line()[programLineNumber].instruction()) as Instruction;
@@ -24,7 +24,7 @@ namespace CoreWar {
                 if (labels.ContainsKey(orgInstruction.Label)) {
                     processStartOffset = labels[orgInstruction.Label] - (int)orgInstruction.LineNumber;
                 } else {
-                    throw new Exception($"Hiba: nincs {orgInstruction.Label} c�mke");
+                    throw new Exception($"Hiba: nincs {orgInstruction.Label} címke");
                 }
             }
 
@@ -32,7 +32,7 @@ namespace CoreWar {
                 for (int i = 0; i < process.Count; ++i) {
                     if (incInstr.Equals(process[i])) {
                         if (!labels.ContainsKey(incInstr.Label)) {
-                            throw new Exception($"Hiba: nincs {incInstr.Label} c�mke");
+                            throw new Exception($"Hiba: nincs {incInstr.Label} címke");
                         }
                         if (incInstr.WrongOperand == 'A') {
                             process[i].OpA.Value = labels[incInstr.Label] - (int)incInstr.LineNumber;
@@ -56,8 +56,9 @@ namespace CoreWar {
             OpCode opcode = (OpCode)Enum.Parse(typeof(OpCode), context.operation().opcode().GetText().ToUpper());
 
             if (opcode == OpCode.ORG) {
-                orgInstruction = new IncompleteInstruction(null, 'A', context.exprA().GetText(), null);         // nincs sz�ks�g a konkr�t Instruction-re, a lineNumbert meg
-                lookingForFirstInstr = true;                                                                    // az els� valid utas�t�sn�l adjuk meg
+                // nincs szükség a konkrét Instruction-re, a lineNumbert meg az első valid utasításnál adjuk meg
+                orgInstruction = new IncompleteInstruction(null, 'A', context.exprA().GetText(), null);         
+                lookingForFirstInstr = true;                                                                    
                 return null;
             }
             if (opcode == OpCode.END) {
