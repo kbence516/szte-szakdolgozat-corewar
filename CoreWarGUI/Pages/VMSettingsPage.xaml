@@ -12,7 +12,7 @@
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="25">
             <TextBlock FontFamily="Courier New, Ubuntu Mono" Text="{x:Bind logo}" HorizontalAlignment="Center"></TextBlock>
             <NumberBox x:Name="MemorySizeNumberBox" Header="Memória mérete:" SpinButtonPlacementMode="Inline" Minimum="100" Maximum="20000" Value="8000" SmallChange="100" LargeChange="1000"/>
-            <NumberBox x:Name="MaxCyclesNumberBox" Header="Körök maximális száma:" SpinButtonPlacementMode="Inline" Minimum="100" Maximum="200000" Value="80000" SmallChange="1000" LargeChange="10000"/>
+            <NumberBox x:Name="MaxCyclesNumberBox" Header="Körök maximális száma:" SpinButtonPlacementMode="Inline" Minimum="1000" Maximum="200000" Value="80000" SmallChange="1000" LargeChange="10000"/>
             <NumberBox x:Name="WarriorsNumberBox" Header="Játékosok száma:" SpinButtonPlacementMode="Inline" Minimum="2" Maximum="4" Value="2" SmallChange="1" LargeChange="1"/>
             <NumberBox x:Name="MaxProcessesNumberBox" Header="Processzusok maximális száma játékosonként:" SpinButtonPlacementMode="Inline" Minimum="100" Maximum="100000" Value="8000" SmallChange="100" LargeChange="1000"/>
             <InfoBar x:Name="ErrorText" Severity="Error" IsOpen="False" IsClosable="False"/>
