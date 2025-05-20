@@ -3,18 +3,18 @@ using Antlr4.Runtime;
 namespace CoreWar {
     public class RedcodeInputLoader {
 
-        public static int LoadFromFile(string path) {
+        public static int LoadFromFile(string path, string playerName = "player") {
             AntlrInputStream inputStream = new(File.ReadAllText(path));
-            return Load(inputStream);
+            return Load(inputStream, playerName);
 
         }
 
-        public static int LoadFromInput(string input) {
+        public static int LoadFromInput(string input, string playerName = "player") {
             AntlrInputStream inputStream = new(input);
-            return Load(inputStream);
+            return Load(inputStream, playerName);
         }
 
-        private static int Load(AntlrInputStream inputStream) {
+        private static int Load(AntlrInputStream inputStream, string playerName) {
             Random random = new();
             VM vm = VM.GetInstance();
 
@@ -29,10 +29,10 @@ namespace CoreWar {
                 p.OpA.Value = vm.ModMemorySize(p.OpA.Value);
                 p.OpB.Value = vm.ModMemorySize(p.OpB.Value);
             });
-            int firstInstructionStart = vm.ModMemorySize(random.Next(vm.Memory.Length) + firstInstructionOffset);          // TODO: leellenõrizni, hogy van-e már ott valami a memóriában
-            vm.LoadIntoMemory(process, firstInstructionStart);
+            int firstInstructionStart = vm.ModMemorySize(random.Next(vm.Memory.Count));
+            vm.LoadIntoMemory(process, firstInstructionStart, playerName);
 
-            return firstInstructionStart;
+            return vm.ModMemorySize(firstInstructionStart + firstInstructionOffset);
         }
     }
 }

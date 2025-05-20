@@ -12,13 +12,13 @@ namespace CoreWarTests {
         [TestMethod]
         public void GetInstance_DefaultMemorySize_Returns8000Memory() {
             VM vm = VM.GetInstance();
-            Assert.AreEqual(8000, vm.Memory.Length);
+            Assert.AreEqual(8000, vm.Memory.Count);
         }
 
         [TestMethod]
         public void GetInstance_PositiveMemorySize_Returns10Memory() {
             VM vm = VM.GetInstance(memorySize: 10);
-            Assert.AreEqual(10, vm.Memory.Length);
+            Assert.AreEqual(10, vm.Memory.Count);
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovAPosAPosB_CopiesAToA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(1, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.A,
@@ -71,7 +71,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovAPosANegB_CopiesAToA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(1, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.A,
@@ -95,12 +95,12 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovAPosANegB_UnderflowsAndCopiesAToA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(1, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.A,
                 new Operation(AddressingMode.IMMEDIATE, 1),
-                new Operation(AddressingMode.DIRECT, -2)
+                new Operation(AddressingMode.DIRECT, -9)
             ));
             vm.InstructionAt(2, false).Copy(new Instruction(
                 OpCode.DAT,
@@ -119,7 +119,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovANegAPosB_CopiesAToA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(1, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.A,
@@ -143,7 +143,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovBPosAPosB_CopiesBToB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(1, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.B,
@@ -167,7 +167,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovABPosAPosB_CopiesAToB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(1, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.AB,
@@ -191,7 +191,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovBAPosAPosB_CopiesBToA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(1, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.BA,
@@ -215,7 +215,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovFPosAPosB_CopiesABtoABWithoutAddrMode() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.F,
@@ -240,7 +240,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovXPosAPosB_CopiesABtoBA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.X,
@@ -264,7 +264,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMovIPosAPosB_CopiesWholeInstr() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOV,
                 OpModifier.I,
@@ -288,7 +288,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpAddAPosAPosB_AddsAToA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.ADD,
                 OpModifier.A,
@@ -312,7 +312,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpAddANegAPosB_AddsAToA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.ADD,
                 OpModifier.A,
@@ -336,7 +336,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpAddBPosAPosB_AddsBToB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.ADD,
                 OpModifier.B,
@@ -360,7 +360,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpAddABPosAPosB_AddsAToB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.ADD,
                 OpModifier.AB,
@@ -384,7 +384,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpAddBAPosAPosB_AddsBToA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.ADD,
                 OpModifier.BA,
@@ -408,7 +408,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpAddFPosAPosB_AddsABToAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.ADD,
                 OpModifier.F,
@@ -432,7 +432,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpAddIPosAPosB_AddsABToAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.ADD,
                 OpModifier.I,
@@ -456,7 +456,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpAddXPosAPosB_AddsABToBA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.ADD,
                 OpModifier.X,
@@ -480,7 +480,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSubAPosAPosB_SubtractsAFromA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SUB,
                 OpModifier.A,
@@ -504,7 +504,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSubANegAPosB_SubtractsAFromA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SUB,
                 OpModifier.A,
@@ -528,7 +528,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSubBPosAPosB_SubtractsBFromB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SUB,
                 OpModifier.B,
@@ -552,7 +552,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSubABPosAPosB_SubtractsAfromB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SUB,
                 OpModifier.AB,
@@ -576,7 +576,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSubBAPosAPosB_SubtractsBFromA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SUB,
                 OpModifier.BA,
@@ -600,7 +600,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSubFPosAPosB_SubtractsABFromAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SUB,
                 OpModifier.F,
@@ -624,7 +624,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSubIPosAPosB_SubtractsABFromAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SUB,
                 OpModifier.I,
@@ -648,7 +648,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSubXPosAPosB_SubtractsABFromBA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SUB,
                 OpModifier.X,
@@ -672,7 +672,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMulAPosAPosB_MultipliesAByA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MUL,
                 OpModifier.A,
@@ -696,7 +696,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMulANegAPosB_MultipliesAByA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MUL,
                 OpModifier.A,
@@ -713,14 +713,14 @@ namespace CoreWarTests {
             Assert.AreEqual(new Instruction(
                 OpCode.DAT,
                 OpModifier.F,
-                new Operation(AddressingMode.INDIRECT, -3),
+                new Operation(AddressingMode.INDIRECT, 7),
                 new Operation(AddressingMode.INDIRECT, 3)
             ), vm.InstructionAt(2, false));
         }
 
         [TestMethod]
         public void ExecuteInstruction_OpMulBPosAPosB_MultipliesBByB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MUL,
                 OpModifier.B,
@@ -744,7 +744,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMulABPosAPosB_MultipliesAByB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MUL,
                 OpModifier.AB,
@@ -768,7 +768,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMulBAPosAPosB_MultipliesBByA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MUL,
                 OpModifier.BA,
@@ -792,7 +792,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMulFPosAPosB_MultipliesABByAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MUL,
                 OpModifier.F,
@@ -816,7 +816,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMulIPosAPosB_MultipliesABByAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MUL,
                 OpModifier.I,
@@ -840,7 +840,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpMulXPosAPosB_MultipliesABByBA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MUL,
                 OpModifier.X,
@@ -864,7 +864,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpDivAPosAPosBDivisible_DividesAByA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.A,
@@ -888,7 +888,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpDivAPosAPosBNotDivisible_DividesAByAAndRoundsDown() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.A,
@@ -912,7 +912,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpDivANegAPosBDivisible_DividesAByA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.A,
@@ -929,14 +929,14 @@ namespace CoreWarTests {
             Assert.AreEqual(new Instruction(
                 OpCode.DAT,
                 OpModifier.F,
-                new Operation(AddressingMode.INDIRECT, -2),
+                new Operation(AddressingMode.INDIRECT, 8),
                 new Operation(AddressingMode.INDIRECT, 3)
             ), vm.InstructionAt(2, false));
         }
 
         [TestMethod]
         public void ExecuteInstruction_OpDivANegAPosBNotDivisible_DividesAByAAndRoundsUp() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.A,
@@ -953,14 +953,14 @@ namespace CoreWarTests {
             Assert.AreEqual(new Instruction(
                 OpCode.DAT,
                 OpModifier.F,
-                new Operation(AddressingMode.INDIRECT, -2),
+                new Operation(AddressingMode.INDIRECT, 8),
                 new Operation(AddressingMode.INDIRECT, 3)
             ), vm.InstructionAt(2, false));
         }
 
         [TestMethod]
         public void ExecuteInstruction_OpDivAPosAZeroB_ReturnsNegativeAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.A,
@@ -980,7 +980,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpDivBPosAPosBDivisible_DividesBByB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.B,
@@ -1004,7 +1004,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpDivABPosAPosBDivisible_DividesAByB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.AB,
@@ -1028,7 +1028,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpDivBAPosAPosBDivisible_DividesBByA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.BA,
@@ -1052,7 +1052,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpDivFPosAPosBDivisible_DividesABByAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.F,
@@ -1076,7 +1076,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpDivIPosAPosBDivisible_DividesABByAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.I,
@@ -1100,7 +1100,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpDivXPosAPosBDivisible_DividesABByBA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.X,
@@ -1124,7 +1124,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModAPosAPosBDivisible_ReturnsZeroModulo() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.A,
@@ -1148,7 +1148,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModAPosAPosBNotDivisible_TakesModuloAOfA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.A,
@@ -1172,7 +1172,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModAPosSrcANegTargetAPosBDivisible_ReturnsZeroModulo() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.A,
@@ -1196,7 +1196,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModANegSrcAPosTargetAPosBDivisible_ReturnsZeroModulo() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.A,
@@ -1220,7 +1220,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModANegSrcAPosTargetAPosBNotDivisible_TakesModuloAOfA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.A,
@@ -1244,7 +1244,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModAPosSrcANegTargetAPosBNotDivisible_TakesModuloAOfA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.A,
@@ -1261,14 +1261,14 @@ namespace CoreWarTests {
             Assert.AreEqual(new Instruction(
                 OpCode.DAT,
                 OpModifier.F,
-                new Operation(AddressingMode.INDIRECT, -1),
+                new Operation(AddressingMode.INDIRECT, 9),
                 new Operation(AddressingMode.INDIRECT, 3)
             ), vm.InstructionAt(2, false));
         }
 
         [TestMethod]
         public void ExecuteInstruction_OpModAPosAZeroB_ReturnsNegativeAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.DIV,
                 OpModifier.A,
@@ -1288,7 +1288,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModBPosAPosBNotDivisible_TakesModuloBOfB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.B,
@@ -1312,7 +1312,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModABPosAPosBNotDivisible_TakesModuloAOfB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.AB,
@@ -1336,7 +1336,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModBAPosAPosBNotDivisible_TakesModuloBOfA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.BA,
@@ -1360,7 +1360,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModFPosAPosBNotDivisible_TakesModuloABOfAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.F,
@@ -1384,7 +1384,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModIPosAPosBNotDivisible_TakesModuloABOfAB() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.I,
@@ -1408,7 +1408,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpModXPosAPosBNotDivisible_TakesModuloABOfBA() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.MOD,
                 OpModifier.X,
@@ -2342,7 +2342,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSpl_ReturnsTwoAddresses() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SPL,
                 OpModifier.B,
@@ -2357,7 +2357,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpAEqualASameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.A,
@@ -2377,7 +2377,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpAEqualADiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.A,
@@ -2397,7 +2397,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpANotEqualASameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.A,
@@ -2417,7 +2417,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpANotEqualADiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.A,
@@ -2437,7 +2437,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpBEqualBSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.B,
@@ -2457,7 +2457,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpBEqualBDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.B,
@@ -2477,7 +2477,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpBNotEqualBSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.B,
@@ -2497,7 +2497,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpBNotEqualBDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.B,
@@ -2517,7 +2517,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpABEqualABSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.AB,
@@ -2537,7 +2537,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpABEqualABDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.AB,
@@ -2557,7 +2557,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpABNotEqualABSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.AB,
@@ -2577,7 +2577,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpABNotEqualABDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.AB,
@@ -2597,7 +2597,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpBAEqualBASameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.BA,
@@ -2617,7 +2617,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpBAEqualBADiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.BA,
@@ -2637,7 +2637,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpBANotEqualBASameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.BA,
@@ -2657,7 +2657,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpBANotEqualBADiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.BA,
@@ -2677,7 +2677,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpFEqualValuesSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.F,
@@ -2697,7 +2697,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpFEqualValuesDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.F,
@@ -2717,7 +2717,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpFNotEqualValuesSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.F,
@@ -2737,7 +2737,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpFNotEqualValuesDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.F,
@@ -2757,7 +2757,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpXEqualValuesSameAddrModeCrossed_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.X,
@@ -2777,7 +2777,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpXEqualValuesDiffAddrModeCrossed_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.X,
@@ -2797,7 +2797,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpXNotEqualValuesSameAddrModeCrossed_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.X,
@@ -2817,7 +2817,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpXNotEqualValuesDiffAddrModeCrossed_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.X,
@@ -2837,7 +2837,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpIEqualValuesSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.I,
@@ -2857,7 +2857,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpIEqualValuesDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.I,
@@ -2877,7 +2877,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpINotEqualValuesSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.I,
@@ -2897,7 +2897,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpINotEqualValuesDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.I,
@@ -2917,7 +2917,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpCmpIEqualValuesSameAddrModeDiffOpCode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.CMP,
                 OpModifier.I,
@@ -2937,7 +2937,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqAEqualASameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.A,
@@ -2957,7 +2957,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqAEqualADiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.A,
@@ -2977,7 +2977,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqANotEqualASameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.A,
@@ -2997,7 +2997,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqANotEqualADiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.A,
@@ -3017,7 +3017,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqBEqualBSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.B,
@@ -3037,7 +3037,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqBEqualBDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.B,
@@ -3057,7 +3057,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqBNotEqualBSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.B,
@@ -3077,7 +3077,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqBNotEqualBDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.B,
@@ -3097,7 +3097,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqABEqualABSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.AB,
@@ -3117,7 +3117,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqABEqualABDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.AB,
@@ -3137,7 +3137,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqABNotEqualABSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.AB,
@@ -3157,7 +3157,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqABNotEqualABDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.AB,
@@ -3177,7 +3177,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqBAEqualBASameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.BA,
@@ -3197,7 +3197,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqBAEqualBADiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.BA,
@@ -3217,7 +3217,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqBANotEqualBASameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.BA,
@@ -3237,7 +3237,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqBANotEqualBADiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.BA,
@@ -3257,7 +3257,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqFEqualValuesSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.F,
@@ -3277,7 +3277,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqFEqualValuesDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.F,
@@ -3297,7 +3297,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqFNotEqualValuesSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.F,
@@ -3317,7 +3317,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqFNotEqualValuesDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.F,
@@ -3337,7 +3337,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqXEqualValuesSameAddrModeCrossed_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.X,
@@ -3357,7 +3357,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqXEqualValuesDiffAddrModeCrossed_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.X,
@@ -3377,7 +3377,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqXNotEqualValuesSameAddrModeCrossed_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.X,
@@ -3397,7 +3397,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqXNotEqualValuesDiffAddrModeCrossed_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.X,
@@ -3417,7 +3417,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqIEqualValuesSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.I,
@@ -3437,7 +3437,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqIEqualValuesDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.I,
@@ -3457,7 +3457,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqINotEqualValuesSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.I,
@@ -3477,7 +3477,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqINotEqualValuesDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.I,
@@ -3497,7 +3497,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSeqIEqualValuesSameAddrModeDiffOpCode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SEQ,
                 OpModifier.I,
@@ -3517,7 +3517,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneAEqualASameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.A,
@@ -3537,7 +3537,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneAEqualADiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.A,
@@ -3557,7 +3557,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneANotEqualASameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.A,
@@ -3577,7 +3577,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneANotEqualADiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.A,
@@ -3597,7 +3597,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneBEqualBSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.B,
@@ -3617,7 +3617,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneBEqualBDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.B,
@@ -3637,7 +3637,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneBNotEqualBSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.B,
@@ -3657,7 +3657,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneBNotEqualBDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.B,
@@ -3677,7 +3677,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneABEqualABSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.AB,
@@ -3697,7 +3697,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneABEqualABDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.AB,
@@ -3717,7 +3717,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneABNotEqualABSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.AB,
@@ -3737,7 +3737,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneABNotEqualABDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.AB,
@@ -3757,7 +3757,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneBAEqualBASameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.BA,
@@ -3777,7 +3777,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneBAEqualBADiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.BA,
@@ -3797,7 +3797,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneBANotEqualBASameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.BA,
@@ -3817,7 +3817,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneBANotEqualBADiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.BA,
@@ -3837,7 +3837,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneFEqualValuesSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.F,
@@ -3857,7 +3857,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneFEqualValuesDiffAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.F,
@@ -3877,7 +3877,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneFNotEqualValuesSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.F,
@@ -3897,7 +3897,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneFNotEqualValuesDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.F,
@@ -3917,7 +3917,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneXEqualValuesSameAddrModeCrossed_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.X,
@@ -3937,7 +3937,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneXEqualValuesDiffAddrModeCrossed_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.X,
@@ -3957,7 +3957,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneXNotEqualValuesSameAddrModeCrossed_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.X,
@@ -3977,7 +3977,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneXNotEqualValuesDiffAddrModeCrossed_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.X,
@@ -3997,7 +3997,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneIEqualValuesSameAddrMode_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.I,
@@ -4017,7 +4017,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneIEqualValuesDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.I,
@@ -4037,7 +4037,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneINotEqualValuesSameAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.I,
@@ -4057,7 +4057,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneINotEqualValuesDiffAddrMode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.I,
@@ -4077,7 +4077,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSneIEqualValuesSameAddrModeDiffOpCode_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SNE,
                 OpModifier.I,
@@ -4097,7 +4097,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltASmallerSrc_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.A,
@@ -4117,7 +4117,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltAEqualSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.A,
@@ -4137,7 +4137,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltAGreaterSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.A,
@@ -4157,7 +4157,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltBSmallerSrc_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.B,
@@ -4177,7 +4177,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltBEqualSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.B,
@@ -4197,7 +4197,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltBGreaterSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.B,
@@ -4217,7 +4217,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltABSmallerSrc_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.AB,
@@ -4237,7 +4237,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltABEqualSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.AB,
@@ -4257,7 +4257,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltABGreaterSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.AB,
@@ -4277,7 +4277,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltBASmallerSrc_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.BA,
@@ -4297,7 +4297,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltBAEqualSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.BA,
@@ -4317,7 +4317,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltBAGreaterSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.BA,
@@ -4337,7 +4337,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltISmallerSrc_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.I,
@@ -4357,7 +4357,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltIEqualSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.I,
@@ -4377,7 +4377,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltIGreaterSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.I,
@@ -4397,7 +4397,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltFSmallerSrc_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.F,
@@ -4417,7 +4417,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltFEqualSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.F,
@@ -4437,7 +4437,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltFGreaterSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.F,
@@ -4457,7 +4457,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltXSmallerSrc_SkipsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.X,
@@ -4477,7 +4477,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltXEqualSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.X,
@@ -4497,7 +4497,7 @@ namespace CoreWarTests {
 
         [TestMethod]
         public void ExecuteInstruction_OpSltXGreaterSrc_ReturnsNextAddress() {
-            VM vm = VM.GetInstance(memorySize: 3);
+            VM vm = VM.GetInstance(memorySize: 10);
             vm.InstructionAt(0, false).Copy(new Instruction(
                 OpCode.SLT,
                 OpModifier.X,

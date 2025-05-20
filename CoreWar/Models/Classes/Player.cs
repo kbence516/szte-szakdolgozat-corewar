@@ -25,7 +25,7 @@ namespace CoreWar {
         /// Ha a játékosnak még van élő processzusa, akkor igaz, különben hamis
         /// </returns>
         public bool Execute() {
-            int[] nextAddresses = vm.ExecuteInstruction(Processes.Dequeue());
+            int[] nextAddresses = vm.ExecuteInstruction(Processes.Dequeue(), Name);
             foreach (int address in nextAddresses) {
                 if (address >= 0) {
                     Processes.Enqueue(address);

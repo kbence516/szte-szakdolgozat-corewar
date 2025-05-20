@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CoreWarGUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "CoreWarGUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
