@@ -1,13 +1,105 @@
-﻿namespace CoreWar {
-    public sealed class VM {
-        public Queue<Player> Players { get; private set; }
-        public Instruction[] Memory { get; private set; }
-        public int MemorySize { get; private set; }
-        public int Cycle { get; private set; }
-        public int MaxCycles { get; private set; }
-        public int MaxProcesses { get; private set; }
-        public int Warriors { get; private set; }
-        public int CurrentInstructionAddress { get; private set; }
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+
+namespace CoreWar {
+    public sealed class VM : INotifyPropertyChanged {
+        private List<string> _originalPlayers;
+        public List<string> OriginalPlayers {
+            get => _originalPlayers;
+            set {
+                if (_originalPlayers != value) {
+                    _originalPlayers = value;
+                    OnPropertyChanged(nameof(OriginalPlayers));
+                }
+            }
+        }
+
+        private Queue<Player> _players;
+        public Queue<Player> Players {
+            get => _players;
+            private set {
+                if (_players != value) {
+                    _players = value;
+                    OnPropertyChanged(nameof(Players));
+                }
+            }
+        }
+        private ObservableCollection<MemoryCell> _memory;
+        public ObservableCollection<MemoryCell> Memory {
+            get => _memory;
+            private set {
+                if (_memory != value) {
+                    _memory = value;
+                    OnPropertyChanged(nameof(Memory));
+                }
+            }
+        }
+        private int _memorySize;
+        public int MemorySize {
+            get => _memorySize;
+            private set {
+                if (_memorySize != value) {
+                    _memorySize = value;
+                    OnPropertyChanged(nameof(MemorySize));
+                }
+            }
+        }
+        private int _cycle;
+        public int Cycle {
+            get => _cycle;
+            private set {
+                if (_cycle != value) {
+                    _cycle = value;
+                    OnPropertyChanged(nameof(Cycle));
+                }
+            }
+        }
+        private int _maxCycles;
+        public int MaxCycles {
+            get => _maxCycles;
+            private set {
+                if (_maxCycles != value) {
+                    _maxCycles = value;
+                    OnPropertyChanged(nameof(MaxCycles));
+                }
+            }
+        }
+        private int _maxProcesses;
+        public int MaxProcesses {
+            get => _maxProcesses;
+            private set {
+                if (_maxProcesses != value) {
+                    _maxProcesses = value;
+                    OnPropertyChanged(nameof(MaxProcesses));
+                }
+            }
+        }
+        private int _warriors;
+        public int Warriors {
+            get => _warriors;
+            private set {
+                if (_warriors != value) {
+                    _warriors = value;
+                    OnPropertyChanged(nameof(Warriors));
+                }
+            }
+        }
+        private int _currentInstructionAddress;
+        public int CurrentInstructionAddress {
+            get => _currentInstructionAddress;
+            private set {
+                if (_currentInstructionAddress != value) {
+                    _currentInstructionAddress = value;
+                    OnPropertyChanged(nameof(CurrentInstructionAddress));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(string propName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+
 
         private static VM instance;
         public static VM GetInstance(int memorySize = 8000, int maxCycles = 80000, int warriors = 2, int maxProcesses = 8000) {
@@ -34,7 +126,7 @@
                 throw new ArgumentException("Adj meg pozitív memóriaméretet!");
             }
             MemorySize = memorySize;
-            Memory = Enumerable.Range(0, MemorySize).Select(_ => new Instruction()).ToArray();
+            Memory = new ObservableCollection<MemoryCell>(Enumerable.Range(0, MemorySize).Select(index => new MemoryCell(index, new Instruction())));
             MaxProcesses = maxProcesses;
             MaxCycles = maxCycles;
             Warriors = warriors;
@@ -42,31 +134,48 @@
             CurrentInstructionAddress = -1;
         }
 
-        public void Play() {
-            while (Cycle < MaxCycles) {
-                Console.WriteLine($"{Cycle}. kör\n{ToString()}");
-                Console.ReadLine();
-
+        // visszatér az aktuális körben kiesett játékos nevével
+        public string Play() {
+            if (Cycle < MaxCycles) {
+                Debug.WriteLine($"{Cycle}. kör");
                 Player currentPlayer = Players.Dequeue();
                 if (currentPlayer.Execute()) {
                     Players.Enqueue(currentPlayer);
+                    Cycle++;
+                    return "";
                 } else {
-                    Console.WriteLine($"{currentPlayer.Name} vesztett!");
+                    Cycle++;
+                    return currentPlayer.Name;
                 }
-
-                if (Players.Count == 1) {
-                    GameOver();
-                }
-                Cycle++;
+            } else {
+                throw new InvalidOperationException("Vége a játéknak!");
             }
-            if (Cycle == MaxCycles) {
-                Tie();
+
+                //    if (Players.Count == 1) {
+                //        GameOver();
+                //    }
+                //    Cycle++;
+                //}
+                //if (Cycle == MaxCycles) {
+                //    Tie();
+                //}
+            }
+
+        public void LoadIntoMemory(List<Instruction> program, int start, string playerName) {
+            for (int i = 0; i < program.Count; ++i) {
+                Memory[(start + i) % Memory.Count].Instruction = program[i];
+                Memory[(start + i) % Memory.Count].LastModifiedBy = playerName;
             }
         }
 
-        public void LoadIntoMemory(List<Instruction> program, int start) {
-            for (int i = 0; i < program.Count; ++i) {
-                Memory[(start + i) % Memory.Length] = program[i];
+        public MemoryCell MemoryCellAt(int address, bool relative) {
+            if (relative) {
+                if (address + CurrentInstructionAddress < 0) {
+                    address += MemorySize;
+                }
+                return Memory[ModMemorySize(address + CurrentInstructionAddress)];
+            } else {
+                return Memory[ModMemorySize(address)];
             }
         }
 
@@ -75,9 +184,9 @@
                 if (address + CurrentInstructionAddress < 0) {
                     address += MemorySize;
                 }
-                return Memory[ModMemorySize(address + CurrentInstructionAddress)];
+                return Memory[ModMemorySize(address + CurrentInstructionAddress)].Instruction;
             } else {
-                return Memory[ModMemorySize(address)];
+                return Memory[ModMemorySize(address)].Instruction;
             }
         }
 
@@ -89,15 +198,17 @@
         /// If the instruction results in termination, the array contains -1.
         /// </returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public int[] ExecuteInstruction(int memoryAddress) {
+        public int[] ExecuteInstruction(int memoryAddress, string playerName = "player") {
             CurrentInstructionAddress = memoryAddress;
             Instruction currentInstruction = InstructionAt(memoryAddress, false);
             Instruction source = InstructionAt(currentInstruction.GetA(), true);
             Instruction target = InstructionAt(currentInstruction.GetB(), true);
+            MemoryCell targetMemCell = MemoryCellAt(currentInstruction.GetB(), true);
             switch (currentInstruction.OpCode) {
                 case OpCode.DAT:
                     return [-1];
                 case OpCode.MOV:
+                    targetMemCell.LastModifiedBy = playerName;
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
                             target.OpA.Copy(source.OpA);
@@ -127,6 +238,7 @@
                     }
                     return [ModMemorySize(++memoryAddress)];
                 case OpCode.ADD:
+                    targetMemCell.LastModifiedBy = playerName;
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
                             target.OpA.Value = ModMemorySize(source.OpA.Value + target.OpA.Value);
@@ -153,8 +265,8 @@
                             throw new ArgumentException("Helytelen módosító");
                     }
                     return [ModMemorySize(++memoryAddress)];
-
                 case OpCode.SUB:
+                    targetMemCell.LastModifiedBy = playerName;
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
                             target.OpA.Value = ModMemorySize(source.OpA.Value - target.OpA.Value);
@@ -182,6 +294,7 @@
                     }
                     return [ModMemorySize(++memoryAddress)];
                 case OpCode.MUL:
+                    targetMemCell.LastModifiedBy = playerName;
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
                             target.OpA.Value = ModMemorySize(source.OpA.Value * target.OpA.Value);
@@ -210,6 +323,7 @@
                     return [ModMemorySize(++memoryAddress)];
                 case OpCode.DIV:
                     try {
+                        targetMemCell.LastModifiedBy = playerName;
                         switch (currentInstruction.Modifier) {
                             case OpModifier.A:
                                 target.OpA.Value = ModMemorySize(source.OpA.Value / target.OpA.Value);
@@ -241,6 +355,7 @@
                     }
                 case OpCode.MOD:
                     try {
+                        targetMemCell.LastModifiedBy = playerName;
                         switch (currentInstruction.Modifier) {
                             case OpModifier.A:
                                 target.OpA.Value = ModMemorySize(source.OpA.Value % target.OpA.Value);
@@ -323,6 +438,7 @@
                     }
                     return [ModMemorySize(++memoryAddress)];
                 case OpCode.DJN:
+                    targetMemCell.LastModifiedBy = playerName;
                     switch (currentInstruction.Modifier) {
                         case OpModifier.BA:
                         case OpModifier.A:
@@ -487,14 +603,14 @@
         }
 
         public void Tie() {
-            Console.WriteLine("Döntetlen!");
-            Console.ReadLine();
+            Debug.WriteLine("Döntetlen!");
+            //Console.ReadLine();
             Environment.Exit(0);
         }
 
         public override string ToString() {
             string output = "A memória jelenlegi állapota:\n";
-            for (int i = 0; i < Memory.Length; ++i) {
+            for (int i = 0; i < Memory.Count; ++i) {
                 if (!Memory[i].Equals(new Instruction())) {
                     output += $"#{i}:\t{Memory[i]}{(i == CurrentInstructionAddress ? "\t\t<< lefutott utasítás" : "")}\n";
                 }

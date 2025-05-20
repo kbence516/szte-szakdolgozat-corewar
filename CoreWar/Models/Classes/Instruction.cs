@@ -59,7 +59,7 @@ namespace CoreWar {
         }
 
         public override string ToString() {
-            return $"{OpCode}.{Modifier}\t{OpA}\t{OpB}";
+            return $"{OpCode}.{Modifier}  {OpA}  {OpB}";
         }
 
         public override bool Equals(object? obj) {
