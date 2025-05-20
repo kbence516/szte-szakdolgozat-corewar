@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml;
+using System;
 
 namespace CoreWarGUI {
     /// <summary>
@@ -14,6 +15,7 @@ namespace CoreWarGUI {
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App() {
+            Environment.SetEnvironmentVariable("MICROSOFT_WINDOWSAPPRUNTIME_BASE_DIRECTORY", AppContext.BaseDirectory);
             InitializeComponent();
         }
 
