@@ -1,5 +1,4 @@
 using Antlr4.Runtime;
-using Microsoft.UI.Xaml;
 
 namespace CoreWar {
     public class RedcodeInputLoader {

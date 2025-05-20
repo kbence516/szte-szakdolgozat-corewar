@@ -241,25 +241,25 @@ namespace CoreWar {
                     targetMemCell.LastModifiedBy = playerName;
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            target.OpA.Value = ModMemorySize(source.OpA.Value + target.OpA.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value + source.OpA.Value);
                             break;
                         case OpModifier.B:
-                            target.OpB.Value = ModMemorySize(source.OpB.Value + target.OpB.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value + source.OpB.Value);
                             break;
                         case OpModifier.AB:
-                            target.OpB.Value = ModMemorySize(source.OpA.Value + target.OpB.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value + source.OpA.Value);
                             break;
                         case OpModifier.BA:
-                            target.OpA.Value = ModMemorySize(source.OpA.Value + target.OpB.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value + source.OpB.Value);
                             break;
                         case OpModifier.F:
                         case OpModifier.I:
-                            target.OpA.Value = ModMemorySize(source.OpA.Value + target.OpA.Value);
-                            target.OpB.Value = ModMemorySize(source.OpB.Value + target.OpB.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value + source.OpA.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value + source.OpB.Value);
                             break;
                         case OpModifier.X:
-                            target.OpA.Value = ModMemorySize(source.OpA.Value + target.OpB.Value);
-                            target.OpB.Value = ModMemorySize(source.OpB.Value + target.OpA.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value + source.OpB.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value + source.OpA.Value);
                             break;
                         default:
                             throw new ArgumentException("Helytelen módosító");
@@ -269,25 +269,25 @@ namespace CoreWar {
                     targetMemCell.LastModifiedBy = playerName;
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            target.OpA.Value = ModMemorySize(source.OpA.Value - target.OpA.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value - source.OpA.Value);
                             break;
                         case OpModifier.B:
-                            target.OpB.Value = ModMemorySize(source.OpB.Value - target.OpB.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value - source.OpB.Value);
                             break;
                         case OpModifier.AB:
-                            target.OpB.Value = ModMemorySize(source.OpA.Value - target.OpB.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value - source.OpA.Value);
                             break;
                         case OpModifier.BA:
-                            target.OpA.Value = ModMemorySize(source.OpB.Value - target.OpA.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value - source.OpB.Value);
                             break;
                         case OpModifier.F:
                         case OpModifier.I:
-                            target.OpA.Value = ModMemorySize(source.OpA.Value - target.OpA.Value);
-                            target.OpB.Value = ModMemorySize(source.OpB.Value - target.OpB.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value - source.OpA.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value - source.OpB.Value);
                             break;
                         case OpModifier.X:
-                            target.OpA.Value = ModMemorySize(source.OpB.Value - target.OpA.Value);
-                            target.OpB.Value = ModMemorySize(source.OpA.Value - target.OpB.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value - source.OpB.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value - source.OpA.Value);
                             break;
                         default:
                             throw new ArgumentException("Helytelen módosító");
@@ -297,25 +297,25 @@ namespace CoreWar {
                     targetMemCell.LastModifiedBy = playerName;
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
-                            target.OpA.Value = ModMemorySize(source.OpA.Value * target.OpA.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value * source.OpA.Value);
                             break;
                         case OpModifier.B:
-                            target.OpB.Value = ModMemorySize(source.OpB.Value * target.OpB.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value * source.OpB.Value);
                             break;
                         case OpModifier.AB:
-                            target.OpB.Value = ModMemorySize(source.OpA.Value * target.OpB.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value * source.OpA.Value);
                             break;
                         case OpModifier.BA:
-                            target.OpA.Value = ModMemorySize(source.OpB.Value * target.OpA.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value * source.OpB.Value);
                             break;
                         case OpModifier.F:
                         case OpModifier.I:
-                            target.OpA.Value = ModMemorySize(source.OpA.Value * target.OpA.Value);
-                            target.OpB.Value = ModMemorySize(source.OpB.Value * target.OpB.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value * source.OpA.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value * source.OpB.Value);
                             break;
                         case OpModifier.X:
-                            target.OpA.Value = ModMemorySize(source.OpB.Value * target.OpA.Value);
-                            target.OpB.Value = ModMemorySize(source.OpA.Value * target.OpB.Value);
+                            target.OpA.Value = ModMemorySize(target.OpA.Value * source.OpB.Value);
+                            target.OpB.Value = ModMemorySize(target.OpB.Value * source.OpA.Value);
                             break;
                         default:
                             throw new ArgumentException("Helytelen módosító");
@@ -326,25 +326,25 @@ namespace CoreWar {
                         targetMemCell.LastModifiedBy = playerName;
                         switch (currentInstruction.Modifier) {
                             case OpModifier.A:
-                                target.OpA.Value = ModMemorySize(source.OpA.Value / target.OpA.Value);
+                                target.OpA.Value = ModMemorySize(target.OpA.Value / source.OpA.Value);
                                 break;
                             case OpModifier.B:
-                                target.OpB.Value = ModMemorySize(source.OpB.Value / target.OpB.Value);
+                                target.OpB.Value = ModMemorySize(target.OpB.Value / source.OpB.Value);
                                 break;
                             case OpModifier.AB:
-                                target.OpB.Value = ModMemorySize(source.OpA.Value / target.OpB.Value);
+                                target.OpB.Value = ModMemorySize(target.OpB.Value / source.OpA.Value);
                                 break;
                             case OpModifier.BA:
-                                target.OpA.Value = ModMemorySize(source.OpB.Value / target.OpA.Value);
+                                target.OpA.Value = ModMemorySize(target.OpA.Value / source.OpB.Value);
                                 break;
                             case OpModifier.F:
                             case OpModifier.I:
-                                target.OpA.Value = ModMemorySize(source.OpA.Value / target.OpA.Value);
-                                target.OpB.Value = ModMemorySize(source.OpB.Value / target.OpB.Value);
+                                target.OpA.Value = ModMemorySize(target.OpA.Value / source.OpA.Value);
+                                target.OpB.Value = ModMemorySize(target.OpB.Value / source.OpB.Value);
                                 break;
                             case OpModifier.X:
-                                target.OpA.Value = ModMemorySize(source.OpB.Value / target.OpA.Value);
-                                target.OpB.Value = ModMemorySize(source.OpA.Value / target.OpB.Value);
+                                target.OpA.Value = ModMemorySize(target.OpA.Value / source.OpB.Value);
+                                target.OpB.Value = ModMemorySize(target.OpB.Value / source.OpA.Value);
                                 break;
                             default:
                                 throw new ArgumentException("Helytelen módosító");
@@ -358,25 +358,25 @@ namespace CoreWar {
                         targetMemCell.LastModifiedBy = playerName;
                         switch (currentInstruction.Modifier) {
                             case OpModifier.A:
-                                target.OpA.Value = ModMemorySize(source.OpA.Value % target.OpA.Value);
+                                target.OpA.Value = ModMemorySize(target.OpA.Value % source.OpA.Value);
                                 break;
                             case OpModifier.B:
-                                target.OpB.Value = ModMemorySize(source.OpB.Value % target.OpB.Value);
+                                target.OpB.Value = ModMemorySize(target.OpB.Value % source.OpB.Value);
                                 break;
                             case OpModifier.AB:
-                                target.OpB.Value = ModMemorySize(source.OpA.Value % target.OpB.Value);
+                                target.OpB.Value = ModMemorySize(target.OpB.Value % source.OpA.Value);
                                 break;
                             case OpModifier.BA:
-                                target.OpA.Value = ModMemorySize(source.OpB.Value % target.OpA.Value);
+                                target.OpA.Value = ModMemorySize(target.OpA.Value % source.OpB.Value);
                                 break;
                             case OpModifier.F:
                             case OpModifier.I:
-                                target.OpA.Value = ModMemorySize(source.OpA.Value % target.OpA.Value);
-                                target.OpB.Value = ModMemorySize(source.OpB.Value % target.OpB.Value);
+                                target.OpA.Value = ModMemorySize(target.OpA.Value % source.OpA.Value);
+                                target.OpB.Value = ModMemorySize(target.OpB.Value % source.OpB.Value);
                                 break;
                             case OpModifier.X:
-                                target.OpA.Value = ModMemorySize(source.OpB.Value % target.OpA.Value);
-                                target.OpB.Value = ModMemorySize(source.OpA.Value % target.OpB.Value);
+                                target.OpA.Value = ModMemorySize(target.OpA.Value % source.OpB.Value);
+                                target.OpB.Value = ModMemorySize(target.OpB.Value % source.OpA.Value);
                                 break;
                             default:
                                 throw new ArgumentException("Helytelen módosító");
