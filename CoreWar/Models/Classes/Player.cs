@@ -14,7 +14,7 @@ namespace CoreWar {
             Name = name;
             Processes = new(maxProcesses);
             Processes.Enqueue(firstProcessStart);
-            Console.WriteLine($"{Name} betöltve a memóriába, kezdőcím: {firstProcessStart}\n");
+            Console.WriteLine($"{Name} betöltve a memóriába, kezdőcím: {firstProcessStart}");
             vm.Players.Enqueue(this);
         }
 
