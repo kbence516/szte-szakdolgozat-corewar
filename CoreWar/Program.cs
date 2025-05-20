@@ -7,6 +7,7 @@
         private static VM vm;
 
         public static void Main(string[] args) {
+            Console.WriteLine(Utils.GetLogo());
 
             if (args.Length == 0) {
                 GetShortHelp();
@@ -14,6 +15,10 @@
             }
             if (args.Contains("--help") || args.Contains("-h")) {
                 GetLongHelp();
+                return;
+            }
+            if (args.Contains("--credits") || args.Contains("-c")) {
+                Console.WriteLine(Utils.GetCredits());
                 return;
             }
             if (args.Contains("--memorySize")) {
@@ -157,7 +162,137 @@
                     return;
                 }
             }
-            Console.WriteLine("\nA memória inicializálva, kezdődhet a játék!");
+            Console.WriteLine("\nA memória inicializálva, kezdődhet a játék!\n");
+            PlayGame();
+        }
+
+        private static void PlayGame() {
+            bool isPlaying = true;
+            while (true) {
+                string? userInput = Console.ReadLine();
+                string[] userInputSplit = userInput?.Split(' ') ?? [];
+                if (userInputSplit.Length > 0) {
+                    switch (userInputSplit[0]) {
+                        case "h":
+                        case "help":
+                            GetGameHelp();
+                            break;
+                        case "r":
+                        case "round":
+                            Console.WriteLine($"Ez a(z) {vm.Cycle}. kör, összesen {vm.MaxCycles} van.");
+                            break;
+                        case "s":
+                        case "show":
+                            if (userInputSplit.Length == 1) {
+                                Console.WriteLine(vm);
+                            } else if (userInputSplit.Length == 2) {
+                                try {
+                                    Console.WriteLine("\n" + vm.MemoryCellAt(int.Parse(userInputSplit[1]), false) + "\n");
+                                } catch (Exception) {
+                                    Console.WriteLine("Helytelen memóriacím! Biztosan helyes számot adtál meg?");
+                                }
+                            } else if (userInputSplit.Length == 3) {
+                                try {
+                                    int min = int.Parse(userInputSplit[1]);
+                                    int max = int.Parse(userInputSplit[2]);
+                                    while (min <= max) {
+                                        Console.WriteLine("\n" + vm.MemoryCellAt(min++, false) + "\n");
+                                    }
+                                } catch (Exception) {
+                                    Console.WriteLine("Helytelen memóriacím! Biztosan helyes számot adtál meg?");
+                                }
+                            }
+                            break;
+                        case "n":
+                        case "next":
+                            if (isPlaying) {
+                                string nextLoser = vm.Play();
+                                if (!nextLoser.Equals("")) {
+                                    Console.WriteLine($"{nextLoser} vesztett!");
+                                    if (vm.Players.Count > 1) {
+                                        Console.WriteLine($"{vm.Players.Count} játékos maradt.");
+                                    } else {
+                                        Console.WriteLine($"Vége a játéknak, {vm.Players.Peek().Name} nyert!");
+                                        isPlaying = false;
+                                    }
+                                    break;
+                                }
+                                if (vm.Cycle == vm.MaxCycles && vm.Players.Count > 1) {
+                                    Console.WriteLine("A lejátszható körök száma elérte a maximumot, a játék döntetlen.");
+                                    isPlaying = false;
+                                }
+                            }
+                            break;
+                        case "j":
+                        case "jump":
+                            if (isPlaying) {
+                                try {
+                                    for (int i = 0; i < int.Parse(userInputSplit[1]); i++) {
+                                        string nextLoser = vm.Play();
+                                        if (!nextLoser.Equals("")) {
+                                            Console.WriteLine($"{nextLoser} vesztett!");
+                                            if (vm.Players.Count > 1) {
+                                                Console.WriteLine($"{vm.Players.Count} játékos maradt.");
+                                            } else {
+                                                Console.WriteLine($"Vége a játéknak, {vm.Players.Peek().Name} nyert!");
+                                                isPlaying = false;
+                                            }
+                                            break;
+                                        }
+                                        if (vm.Cycle == vm.MaxCycles && vm.Players.Count > 1) {
+                                            Console.WriteLine("A lejátszható körök száma elérte a maximumot, a játék döntetlen.");
+                                            isPlaying = false;
+                                            break;
+                                        }
+                                    }
+                                } catch (Exception) {
+                                    Console.WriteLine("Egész számot adj meg az ugráshoz!");
+                                }
+                            }
+                            break;
+                        case "c":
+                        case "continue":
+                            if (isPlaying) {
+                                while (true) {
+                                    string nextLoser = vm.Play();
+                                    if (!nextLoser.Equals("")) {
+                                        Console.WriteLine($"{nextLoser} vesztett!");
+                                        if (vm.Players.Count > 1) {
+                                            Console.WriteLine($"{vm.Players.Count} játékos maradt.");
+                                        } else {
+                                            Console.WriteLine($"Vége a játéknak, {vm.Players.Peek().Name} nyert!");
+                                            isPlaying = false;
+                                        }
+                                        break;
+                                    }
+                                    if (vm.Cycle == vm.MaxCycles && vm.Players.Count > 1) {
+                                        Console.WriteLine("A lejátszható körök száma elérte a maximumot, a játék döntetlen.");
+                                        isPlaying = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        case "e":
+                        case "exit":
+                            Environment.Exit(0);
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static void GetGameHelp() {
+            Console.WriteLine("\nJáték közben elérhető utasítások:");
+            Console.WriteLine("\t n(ext)\t\t\t\tKövetkező lépés");
+            Console.WriteLine("\t j(ump) <n>\t\t\tUgorj n lépést");
+            Console.WriteLine("\t c(ontinue)\t\t\tFolytatás, amíg valaki veszít, vagy vége a játéknak");
+            Console.WriteLine("\t s(how)\t\t\t\tMutasd az összes nemüres mezőt");
+            Console.WriteLine("\t s(how) [n]\t\t\tMutasd az n. mezőt");
+            Console.WriteLine("\t s(how) [first] [last]\t\tMutasd az összes nemüres mezőt [first, last] tartományban");
+            Console.WriteLine("\t r(ound)\t\t\tHányadik körnél tartunk?");
+            Console.WriteLine("\t h(elp)\t\t\t\tEnnek az üzenetnek a megjelenítése");
+            Console.WriteLine("\t e(xit)\t\t\t\tKilépés a játékból");
         }
 
         private static void GetErrorMessage() {

@@ -137,7 +137,6 @@ namespace CoreWar {
         // visszatér az aktuális körben kiesett játékos nevével
         public string Play() {
             if (Cycle < MaxCycles) {
-                Debug.WriteLine($"{Cycle}. kör");
                 Player currentPlayer = Players.Dequeue();
                 if (currentPlayer.Execute()) {
                     Players.Enqueue(currentPlayer);
@@ -596,23 +595,11 @@ namespace CoreWar {
             throw new InvalidOperationException();
         }
 
-        public void GameOver() {
-            Console.WriteLine($"Vége a játéknak, {Players.Dequeue().Name} nyert!");
-            Console.ReadLine();
-            Environment.Exit(0);
-        }
-
-        public void Tie() {
-            Debug.WriteLine("Döntetlen!");
-            //Console.ReadLine();
-            Environment.Exit(0);
-        }
-
         public override string ToString() {
             string output = "A memória jelenlegi állapota:\n";
             for (int i = 0; i < Memory.Count; ++i) {
-                if (!Memory[i].Equals(new Instruction())) {
-                    output += $"#{i}:\t{Memory[i]}{(i == CurrentInstructionAddress ? "\t\t<< lefutott utasítás" : "")}\n";
+                if (!Memory[i].Instruction.Equals(new Instruction())) {
+                    output += $"{Memory[i]}{(i == CurrentInstructionAddress ? "\t\t<< lefutott utasítás" : "")}\n\n";
                 }
             }
             return output;
