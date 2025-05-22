@@ -29,7 +29,7 @@ namespace CoreWar {
                 p.OpA.Value = vm.ModMemorySize(p.OpA.Value);
                 p.OpB.Value = vm.ModMemorySize(p.OpB.Value);
             });
-            int firstInstructionStart = vm.ModMemorySize(random.Next(vm.Memory.Count));
+            int firstInstructionStart = random.Next(vm.MemorySize);
             vm.LoadIntoMemory(process, firstInstructionStart, playerName);
 
             return vm.ModMemorySize(firstInstructionStart + firstInstructionOffset);
