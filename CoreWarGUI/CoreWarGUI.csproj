@@ -21,7 +21,7 @@
     <None Remove="Pages\PlayerLoaderPage.xaml" />
     <None Remove="Pages\VMSettingsPage.xaml" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
@@ -40,6 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoreWar\CoreWar.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Assets\CommonWarriors\*.red">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\CombatPage.xaml">

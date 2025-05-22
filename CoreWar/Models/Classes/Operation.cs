@@ -12,9 +12,9 @@ namespace CoreWar {
             Value = value;
         }
 
-        public void Copy(Operation other) {
-            Mode = other.Mode;
-            Value = other.Value;
+        public void Copy(Operation source) {
+            Mode = source.Mode;
+            Value = source.Value;
         }
 
         public override bool Equals(object? obj) {

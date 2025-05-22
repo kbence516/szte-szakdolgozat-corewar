@@ -83,17 +83,21 @@ namespace CoreWarGUI {
             try {
                 int firstProcessStart = -1;
                 if (CPUDecides.IsChecked == true) {
-                    string warriorsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\..\..\Assets\CommonWarriors");
-                    var files = Directory.GetFiles(warriorsPath);
-                    //string randomPath = Path.Combine(warriorsPath, @".\scannerY.red");
-                    string randomPath = files[new Random().Next(files.Length)];
-                    firstProcessStart = RedcodeInputLoader.LoadFromFile(randomPath, NameTextBox.Text);
+                    try {
+                        string warriorsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @".\Assets\CommonWarriors");
+                        var files = Directory.GetFiles(warriorsPath);
+                        string randomPath = files[new Random().Next(files.Length)];
+                        firstProcessStart = RedcodeInputLoader.LoadFromFile(randomPath, NameTextBox.Text);
+                    } catch (Exception) {
+                        ErrorText.Title = "Jelenleg a Redcode véletlenszerû kisorsolása nem elérhetõ.";
+                        ErrorText.IsOpen = true;
+                    }
                 } else if (ReadFromFile.IsChecked == true) {
                     firstProcessStart = RedcodeInputLoader.LoadFromFile(filePath!, NameTextBox.Text);
                 } else if (ReadFromInput.IsChecked == true) {
                     firstProcessStart = RedcodeInputLoader.LoadFromInput(RedcodeTextBox.Text.ReplaceLineEndings(), NameTextBox.Text);
                 }
-                Player p = new(NameTextBox.Text, firstProcessStart, vm.MaxProcesses);
+                Player p = new(NameTextBox.Text, firstProcessStart);
 
                 if (vm.Players.Count == vm.Warriors) {
                     WaitPopup.IsOpen = true;

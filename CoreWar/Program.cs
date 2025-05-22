@@ -17,7 +17,7 @@
                 GetLongHelp();
                 return;
             }
-            if (args.Contains("--credits") || args.Contains("-c")) {
+            if (args.Contains("--about") || args.Contains("-a")) {
                 Console.WriteLine(Utils.GetCredits());
                 return;
             }
@@ -116,7 +116,7 @@
                     for (int i = 0; i < warriors; i++) {
                         string name = Path.GetFileNameWithoutExtension(args[warriorsIndex]);
                         int firstProcessStart = RedcodeInputLoader.LoadFromFile(args[warriorsIndex++], name);
-                        Player p = new(name, firstProcessStart, vm.MaxProcesses);
+                        Player p = new(name, firstProcessStart);
                     }
                 } catch (IndexOutOfRangeException) {
                     GetErrorMessage();
@@ -139,7 +139,7 @@
                     for (int i = 0; i < warriors; i++) {
                         string name = Path.GetFileNameWithoutExtension(args[warriorsIndex]);
                         int firstProcessStart = RedcodeInputLoader.LoadFromFile(args[warriorsIndex++], name);
-                        Player p = new(name, firstProcessStart, vm.MaxProcesses);
+                        Player p = new(name, firstProcessStart);
                     }
                 } catch (IndexOutOfRangeException) {
                     GetErrorMessage();
@@ -155,8 +155,8 @@
                     string name2 = Path.GetFileNameWithoutExtension(args[^1]);
                     int firstProcessStart1 = RedcodeInputLoader.LoadFromFile(args[^2], name1);
                     int firstProcessStart2 = RedcodeInputLoader.LoadFromFile(args[^1], name2);
-                    Player p1 = new(name1, firstProcessStart1, vm.MaxProcesses);
-                    Player p2 = new(name2, firstProcessStart2, vm.MaxProcesses);
+                    Player p1 = new(name1, firstProcessStart1);
+                    Player p2 = new(name2, firstProcessStart2);
                 } catch (Exception) {
                     Console.WriteLine("Hiba a fájlok beolvasásakor! Biztosan érvényes formátumú Redcode-ot adtál meg?");
                     return;
@@ -277,6 +277,8 @@
                         case "exit":
                             Environment.Exit(0);
                             break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -287,9 +289,9 @@
             Console.WriteLine("\t n(ext)\t\t\t\tKövetkező lépés");
             Console.WriteLine("\t j(ump) <n>\t\t\tUgorj n lépést");
             Console.WriteLine("\t c(ontinue)\t\t\tFolytatás, amíg valaki veszít, vagy vége a játéknak");
-            Console.WriteLine("\t s(how)\t\t\t\tMutasd az összes nemüres mezőt");
-            Console.WriteLine("\t s(how) [n]\t\t\tMutasd az n. mezőt");
-            Console.WriteLine("\t s(how) [first] [last]\t\tMutasd az összes nemüres mezőt [first, last] tartományban");
+            Console.WriteLine("\t s(how)\t\t\t\tMutasd az összes nemüres cellát");
+            Console.WriteLine("\t s(how) [n]\t\t\tMutasd az n. cellát");
+            Console.WriteLine("\t s(how) [first] [last]\t\tMutasd az összes cellát [first, last] tartományban");
             Console.WriteLine("\t r(ound)\t\t\tHányadik körnél tartunk?");
             Console.WriteLine("\t h(elp)\t\t\t\tEnnek az üzenetnek a megjelenítése");
             Console.WriteLine("\t e(xit)\t\t\t\tKilépés a játékból");
@@ -317,6 +319,7 @@
             Console.WriteLine("\t-c, --maxCycles\t\tMaximális körök száma - [1000-200000], alapértelmezetten 80000");
             Console.WriteLine("\t-p, --maxProcesses\tMaximális processzuszok száma játékosonként - [100-100000], alapértelmezetten 8000");
             Console.WriteLine("\t-w, --warriors\t\tJátékosok száma - [2-4], alapértelmezetten 2");
+            Console.WriteLine("\t-a, --about\t\tNévjegy bemutatása");
             Console.WriteLine("\t-h, --help\t\tEnnek az üzenetnek a megjelenítése\n");
             Console.WriteLine("A játékon belüli vezérlés megismeréséhez indítás után használd a h(elp) utasítást!");
             Console.ReadLine();

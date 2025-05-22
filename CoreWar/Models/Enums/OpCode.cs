@@ -18,7 +18,6 @@ namespace CoreWar {
         SNE,            // következő ugrása, ha nem egyenlő
         NOP,             // nem csinál semmit
         ORG,            // processzus kezdőcíme
-        END,             // program vége
-        EQU            // konstans definiálása
+        END             // program vége
     }
 }

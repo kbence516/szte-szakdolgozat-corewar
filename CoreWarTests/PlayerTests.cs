@@ -17,7 +17,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 0),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsFalse(p.Execute());
         }
 
@@ -36,7 +36,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 0),
                 new Operation(AddressingMode.INDIRECT, 0)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsTrue(p.Execute());
         }
 
@@ -55,7 +55,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 0),
                 new Operation(AddressingMode.INDIRECT, 0)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsTrue(p.Execute());
         }
 
@@ -74,7 +74,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 0),
                 new Operation(AddressingMode.INDIRECT, 0)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsTrue(p.Execute());
         }
 
@@ -93,7 +93,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 0),
                 new Operation(AddressingMode.INDIRECT, 0)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsTrue(p.Execute());
         }
 
@@ -112,7 +112,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 1),
                 new Operation(AddressingMode.INDIRECT, 1)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsTrue(p.Execute());
         }
 
@@ -131,7 +131,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 1),
                 new Operation(AddressingMode.INDIRECT, 1)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsTrue(p.Execute());
         }
 
@@ -150,7 +150,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 1),
                 new Operation(AddressingMode.INDIRECT, 1)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsFalse(p.Execute());
         }
 
@@ -169,7 +169,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 1),
                 new Operation(AddressingMode.INDIRECT, 1)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsTrue(p.Execute());
         }
 
@@ -188,7 +188,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 1),
                 new Operation(AddressingMode.INDIRECT, 1)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsTrue(p.Execute());
         }
 
@@ -207,7 +207,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.INDIRECT, 1),
                 new Operation(AddressingMode.INDIRECT, 1)
             ));
-            Player p = new("test", 1, 1);
+            Player p = new("test", 1);
             Assert.IsFalse(p.Execute());
         }
 
@@ -220,7 +220,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 1),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -239,7 +239,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 0),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -258,7 +258,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 1),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -277,7 +277,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 1),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -296,7 +296,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 0),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -315,7 +315,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 2),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -334,7 +334,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 1),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -347,7 +347,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.DIRECT, 1),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -366,7 +366,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 1),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -385,7 +385,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 0),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -404,7 +404,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 1),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -423,7 +423,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 0),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -442,7 +442,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 0),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -461,7 +461,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 1),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -480,7 +480,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 0),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -499,7 +499,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 1),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
 
@@ -512,7 +512,7 @@ namespace CoreWarTests {
                 new Operation(AddressingMode.IMMEDIATE, 0),
                 new Operation(AddressingMode.IMMEDIATE, 0)
             ));
-            Player p = new("test", 0, 1);
+            Player p = new("test", 0);
             Assert.IsTrue(p.Execute());
         }
     }

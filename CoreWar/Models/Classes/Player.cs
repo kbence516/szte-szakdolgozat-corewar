@@ -10,9 +10,9 @@ namespace CoreWar {
             get; private set;
         }
 
-        public Player(string name, int firstProcessStart, int maxProcesses) {
+        public Player(string name, int firstProcessStart) {
             Name = name;
-            Processes = new(maxProcesses);
+            Processes = new(vm.MaxProcesses);
             Processes.Enqueue(firstProcessStart);
             Console.WriteLine($"{Name} betöltve a memóriába, kezdőcím: {firstProcessStart}");
             vm.Players.Enqueue(this);
@@ -27,7 +27,7 @@ namespace CoreWar {
         public bool Execute() {
             int[] nextAddresses = vm.ExecuteInstruction(Processes.Dequeue(), Name);
             foreach (int address in nextAddresses) {
-                if (address >= 0) {
+                if (address >= 0 && Processes.Count <= vm.MaxProcesses) {
                     Processes.Enqueue(address);
                 }
             }

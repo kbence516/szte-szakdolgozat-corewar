@@ -149,16 +149,7 @@ namespace CoreWar {
             } else {
                 throw new InvalidOperationException("Vége a játéknak!");
             }
-
-                //    if (Players.Count == 1) {
-                //        GameOver();
-                //    }
-                //    Cycle++;
-                //}
-                //if (Cycle == MaxCycles) {
-                //    Tie();
-                //}
-            }
+        }
 
         public void LoadIntoMemory(List<Instruction> program, int start, string playerName) {
             for (int i = 0; i < program.Count; ++i) {

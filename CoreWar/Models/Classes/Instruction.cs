@@ -51,11 +51,11 @@ namespace CoreWar {
             };
         }
 
-        public void Copy(Instruction other) {
-            OpCode = other.OpCode;
-            Modifier = other.Modifier;
-            OpA.Copy(other.OpA);
-            OpB.Copy(other.OpB);
+        public void Copy(Instruction source) {
+            OpCode = source.OpCode;
+            Modifier = source.Modifier;
+            OpA.Copy(source.OpA);
+            OpB.Copy(source.OpB);
         }
 
         public override string ToString() {

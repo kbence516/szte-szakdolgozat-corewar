@@ -8,12 +8,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="25">
-            <TextBlock FontFamily="Courier New, Ubuntu Mono" Text="{x:Bind logo}"></TextBlock>
-            <Button HorizontalAlignment="Center" Content="Játék" Width="200" Click="PlayButton_Click"></Button>
-            <Button HorizontalAlignment="Center" Content="Névjegy" Width="200" Click="CreditsButton_Click"></Button>
-            <Button HorizontalAlignment="Center" Content="Kilépés" Width="200" Click="ExitButton_Click"></Button>
-        </StackPanel>
-    </Grid>
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="25">
+        <TextBlock FontFamily="Courier New" Text="{x:Bind logo}"></TextBlock>
+        <Button HorizontalAlignment="Center" Content="Játék" Width="200" Click="PlayButton_Click"></Button>
+        <Button HorizontalAlignment="Center" Content="Névjegy" Width="200" Click="CreditsButton_Click"></Button>
+        <Button HorizontalAlignment="Center" Content="Kilépés" Width="200" Click="ExitButton_Click"></Button>
+    </StackPanel>
 </Page>

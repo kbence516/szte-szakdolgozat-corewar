@@ -8,37 +8,35 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
-        <ScrollViewer Margin="25">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="25">
+    <ScrollViewer Margin="25">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="25">
 
-                <TextBlock FontFamily="Courier New" Text="{x:Bind logo}" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock FontFamily="Courier New" Text="{x:Bind logo}" HorizontalAlignment="Center"/>
 
-                <InfoBar IsOpen="True" IsClosable="False" MaxWidth="416" Title="Hogy néz ki a helyes Redcode?" Message="- A következő utasítások érvényesek: DAT, MOV, ADD, SUB, MUL, DIV, MOD, JMP, JMZ, JMN, DJN, CMP, SLT, SPL, SEQ, SNE, NOP, ORG, END (fontos a nagybetű)&#x0a;- A következő utasításmódosítók érvényesek: A, B, AB, BA, I, F, X (fontos a nagybetű)&#x0a;- A következő címzések érvényesek: # (közvetlen), $ (direkt), @ (indirekt), &lt; (előcsökkentő indirekt), &gt; (utónövelő indirekt). A címzések elhagyhatók, ekkor a közvetlen lesz az alapértelmezett&#x0a;- Minden utasításnak [0, 2] operandusa van, amely egész számokat tartalmaz&#x0a;- END utasításra zárul, kommentek csak utána szerepelnek, pontosvessző karakterrel a sor elején&#x0a;- Az egész kód üres sorral zárul&#x0a;&#x0a;Példa egy helyes utasításra:&#9;MOV.I  @2  #3"/>
+            <InfoBar IsOpen="True" IsClosable="False" MaxWidth="416" Title="Hogy néz ki a helyes Redcode?" Message="- A következő utasítások érvényesek: DAT, MOV, ADD, SUB, MUL, DIV, MOD, JMP, JMZ, JMN, DJN, CMP, SLT, SPL, SEQ, SNE, NOP, ORG, END (fontos a nagybetű)&#x0a;- A következő utasításmódosítók érvényesek: A, B, AB, BA, I, F, X (fontos a nagybetű)&#x0a;- A következő címzések érvényesek: # (közvetlen), $ (direkt), @ (indirekt), &lt; (előcsökkentő indirekt), &gt; (utónövelő indirekt). A címzések elhagyhatók, ekkor a közvetlen lesz az alapértelmezett&#x0a;- Minden utasításnak [0, 2] operandusa van, amely egész számokat tartalmaz&#x0a;- END utasításra zárul, kommentek csak utána szerepelnek, pontosvessző karakterrel a sor elején&#x0a;- Az egész kód üres sorral zárul&#x0a;&#x0a;Példa egy helyes utasításra:&#9;MOV.I  @2  #3"/>
 
 
-                <TextBox x:Name="NameTextBox" Header="{x:Bind NameTextBoxHeader}" />
-                <RadioButtons Header="Választott Redcode:">
-                    <RadioButton x:Name="CPUDecides" Content="A gépre bízom" Checked="CPUDecides_Checked" ToolTipService.ToolTip="Kapsz egy véletlenszerű Redcode-ot a az előre definált harcosok közül." ToolTipService.Placement="Right"/>
-                    <RadioButton x:Name="ReadFromFile" Content="Betöltöm fájlból" Checked="ReadFromFile_Checked" ToolTipService.ToolTip="Töltsd be a saját harcosod egy .red kiterjesztésű fájlból!" ToolTipService.Placement="Right"/>
-                    <RadioButton x:Name="ReadFromInput" Content="Megírom itt és most" Checked="ReadFromInput_Checked" ToolTipService.ToolTip="A színpad a tiéd, alkosd meg a legújabb harcost!" ToolTipService.Placement="Right"/>
-                </RadioButtons>
-                <Button x:Name="OpenFileButton" Content="Fájl betöltése" Width="416" Click="OpenFileButton_Click" Visibility="Collapsed"/>
-                <TextBlock x:Name="PickedFileTextBlock" Visibility="Collapsed"/>
-                <TextBox x:Name="RedcodeTextBox" MinHeight="150" MaxHeight="2000" Visibility="Collapsed" AcceptsReturn="True" PlaceholderText="Ide írhatod a Redcode-odat..." FontFamily="Courier New"/>
-                <InfoBar x:Name="ErrorText" Severity="Error" IsOpen="False" IsClosable="False"/>
-                    <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Center">
-                    <Button x:Name="BackButton" Content="Vissza" Width="200" Click="BackButton_Click"/>
-                    <Button x:Name="NextButton" Content="{x:Bind ButtonText}" Width="200" Click="NextButton_Click" HorizontalAlignment="Center" IsEnabled="False"/>
-                </StackPanel>
-                
-                <Popup x:Name="WaitPopup" VerticalOffset="-470" HorizontalOffset="60" IsOpen="False">
-                    <Border Padding="20" CornerRadius="{StaticResource OverlayCornerRadius}" Width="300" Height="140" BorderThickness="1" BorderBrush="{ThemeResource SurfaceStrokeColorDefaultBrush}"
-                Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}">
-                        <TextBlock Text="A memória inicializálása folyamatban, egy kis türelmet..." FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </Border>
-                </Popup>
+            <TextBox x:Name="NameTextBox" Header="{x:Bind NameTextBoxHeader}" />
+            <RadioButtons Header="Választott Redcode:">
+                <RadioButton x:Name="CPUDecides" Content="A gépre bízom" Checked="CPUDecides_Checked" ToolTipService.ToolTip="Kapsz egy véletlenszerű Redcode-ot a az előre definált harcosok közül." ToolTipService.Placement="Right"/>
+                <RadioButton x:Name="ReadFromFile" Content="Betöltöm fájlból" Checked="ReadFromFile_Checked" ToolTipService.ToolTip="Töltsd be a saját harcosod egy .red kiterjesztésű fájlból!" ToolTipService.Placement="Right"/>
+                <RadioButton x:Name="ReadFromInput" Content="Megírom itt és most" Checked="ReadFromInput_Checked" ToolTipService.ToolTip="A színpad a tiéd, alkosd meg a legújabb harcost!" ToolTipService.Placement="Right"/>
+            </RadioButtons>
+            <Button x:Name="OpenFileButton" Content="Fájl betöltése" Width="416" Click="OpenFileButton_Click" Visibility="Collapsed"/>
+            <TextBlock x:Name="PickedFileTextBlock" Visibility="Collapsed"/>
+            <TextBox x:Name="RedcodeTextBox" MinHeight="150" MaxHeight="2000" Visibility="Collapsed" AcceptsReturn="True" PlaceholderText="Ide írhatod a Redcode-odat..." FontFamily="Courier New"/>
+            <InfoBar x:Name="ErrorText" Severity="Error" IsOpen="False" IsClosable="False"/>
+            <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Center">
+                <Button x:Name="BackButton" Content="Vissza" Width="200" Click="BackButton_Click"/>
+                <Button x:Name="NextButton" Content="{x:Bind ButtonText}" Width="200" Click="NextButton_Click" HorizontalAlignment="Center" IsEnabled="False"/>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
+
+            <Popup x:Name="WaitPopup" VerticalOffset="-470" HorizontalOffset="60" IsOpen="False">
+                <Border Padding="20" CornerRadius="{StaticResource OverlayCornerRadius}" Width="300" Height="140" BorderThickness="1" BorderBrush="{ThemeResource SurfaceStrokeColorDefaultBrush}"
+                Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}">
+                    <TextBlock Text="A memória inicializálása folyamatban, egy kis türelmet..." FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+                </Border>
+            </Popup>
+        </StackPanel>
+    </ScrollViewer>
 </Page>

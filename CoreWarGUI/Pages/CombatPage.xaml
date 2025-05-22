@@ -12,7 +12,8 @@
     <StackPanel Margin="0 16">
         <ScrollViewer x:Name="scrollViewer"   
                 IsVerticalScrollChainingEnabled="False"  
-                Padding="16">
+                Padding="16"
+                Height="592">
 
             <ScrollViewer.Resources>
                 <local:PlayerToColorBrushConverter x:Key="PlayerToColorBrushConverter"/>
