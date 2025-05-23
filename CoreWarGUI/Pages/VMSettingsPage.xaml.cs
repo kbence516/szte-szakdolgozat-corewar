@@ -5,6 +5,10 @@ using System;
 
 
 namespace CoreWarGUI {
+
+    /// <summary>
+    /// A virtuális memória beállításait tartalmazó oldal XAML kódja mögötti logika
+    /// </summary>
     public sealed partial class VMSettingsPage : Page {
         private readonly string logo;
 

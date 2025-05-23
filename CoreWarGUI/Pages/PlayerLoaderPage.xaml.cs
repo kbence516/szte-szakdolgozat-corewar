@@ -1,18 +1,16 @@
 using CoreWar;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage.Pickers;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace CoreWarGUI {
+    /// <summary>
+    /// A játékosok adatait betöltõ oldal XAML kódja mögötti logika
+    /// </summary>
     public sealed partial class PlayerLoaderPage : Page {
         private readonly VM vm;
         private readonly int nextPlayerCount;

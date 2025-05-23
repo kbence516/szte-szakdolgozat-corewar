@@ -1,6 +1,14 @@
 ﻿namespace CoreWar {
+
+    /// <summary>
+    /// Egyéb segédfüggvények
+    /// </summary>
     public class Utils {
 
+
+        /// <summary>
+        /// MemFight logó ASCII art formájában
+        /// </summary>
         public static string GetLogo() {
             return """
 
@@ -16,6 +24,10 @@
 """;
         }
 
+
+        /// <summary>
+        /// Névjegy
+        /// </summary>
         public static string GetCredits() {
             return "Készítette: Kovács Bence\nSZTE-TTIK Informatikai Intézet\nprogramtervező informatikus BSc szakdolgozat - 2024/25/II. félév\nSzakdolgozat témája: CoreWar játék létrehozása .NET keretrendszerben\nTémavezető: dr. Kiss Ákos";
         }

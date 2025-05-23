@@ -3,8 +3,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 
 namespace CoreWar {
+    /// <summary>
+    /// A virtuális memóriát reprezentáló singleton osztály
+    /// </summary>
     public sealed class VM : INotifyPropertyChanged {
         private List<string> _originalPlayers;
+        /// <summary>
+        /// Az eredeti játékosok listája (a GUI-n látható színhozzárendelés miatt kell inicializálni)
+        /// </summary>
         public List<string> OriginalPlayers {
             get => _originalPlayers;
             set {
@@ -16,6 +22,9 @@ namespace CoreWar {
         }
 
         private Queue<Player> _players;
+        /// <summary>
+        /// A játékban lévő harcosok sora
+        /// </summary>
         public Queue<Player> Players {
             get => _players;
             private set {
@@ -26,6 +35,9 @@ namespace CoreWar {
             }
         }
         private ObservableCollection<MemoryCell> _memory;
+        /// <summary>
+        /// A memória cellái
+        /// </summary>
         public ObservableCollection<MemoryCell> Memory {
             get => _memory;
             private set {
@@ -36,6 +48,9 @@ namespace CoreWar {
             }
         }
         private int _memorySize;
+        /// <summary>
+        /// A virtuális memória mérete
+        /// </summary>
         public int MemorySize {
             get => _memorySize;
             private set {
@@ -46,6 +61,9 @@ namespace CoreWar {
             }
         }
         private int _cycle;
+        /// <summary>
+        /// Az aktuálisan futó kör száma
+        /// </summary>
         public int Cycle {
             get => _cycle;
             private set {
@@ -56,6 +74,9 @@ namespace CoreWar {
             }
         }
         private int _maxCycles;
+        /// <summary>
+        /// A játék maximális köreinek száma
+        /// </summary>
         public int MaxCycles {
             get => _maxCycles;
             private set {
@@ -66,6 +87,9 @@ namespace CoreWar {
             }
         }
         private int _maxProcesses;
+        /// <summary>
+        /// A harcosonként maximálisan engedélyezett processzusok száma
+        /// </summary>
         public int MaxProcesses {
             get => _maxProcesses;
             private set {
@@ -76,6 +100,9 @@ namespace CoreWar {
             }
         }
         private int _warriors;
+        /// <summary>
+        /// A harcosok maximális száma
+        /// </summary>
         public int Warriors {
             get => _warriors;
             private set {
@@ -86,6 +113,9 @@ namespace CoreWar {
             }
         }
         private int _currentInstructionAddress;
+        /// <summary>
+        /// A soron következő utasítás címe
+        /// </summary>
         public int CurrentInstructionAddress {
             get => _currentInstructionAddress;
             private set {
@@ -97,11 +127,21 @@ namespace CoreWar {
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+        /// <summary>
+        /// A GUI frissítéséért felelős metódus
+        /// </summary>
         private void OnPropertyChanged(string propName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 
 
         private static VM instance;
+        /// <summary>
+        /// A singleton memóriapéldány konstruktora és settere (már létező példány esetén a megadott paraméterek figyelmen kívül maradnak)
+        /// </summary>
+        /// <param name="memorySize">A memória maximális mérete</param>
+        /// <param name="memorySize">A memória maximális mérete</param>
+        /// <param name="warriors">A harcosok kezdeti száma</param>
+        /// <param name="maxProcesses">A harcosonként engedélyezett maximális processzusok száma</param>
         public static VM GetInstance(int memorySize = 8000, int maxCycles = 80000, int warriors = 2, int maxProcesses = 8000) {
             if (instance == null) {
                 instance = new(memorySize, maxCycles, warriors, maxProcesses);
@@ -109,17 +149,30 @@ namespace CoreWar {
             return instance;
         }
 
+        /// <summary>
+        /// A singleton memóriapéldány törlése
+        /// </summary>
         public static void ResetInstance() {
             instance = null;
         }
 
-        public int ModMemorySize(int value) {
-            while (value < 0) {
-                value += instance.MemorySize;
+        /// <summary>
+        /// A memória címének normalizálása [0, MemorySize-1] tartományba
+        /// </summary>
+        public int ModMemorySize(int memoryAddress) {
+            while (memoryAddress < 0) {
+                memoryAddress += instance.MemorySize;
             }
-            return value % instance.MemorySize;
+            return memoryAddress % instance.MemorySize;
         }
 
+        /// <summary>
+        /// Privát konstruktor a singleton memóriapéldányhoz
+        /// </summary>
+        /// <param name="memorySize">A memória maximális mérete</param>
+        /// <param name="memorySize">A memória maximális mérete</param>
+        /// <param name="warriors">A harcosok kezdeti száma</param>
+        /// <param name="maxProcesses">A harcosonként engedélyezett maximális processzusok száma</param>
         private VM(int memorySize, int maxCycles, int warriors, int maxProcesses) {
             Players = new(warriors);
             if (memorySize <= 0) {
@@ -134,7 +187,13 @@ namespace CoreWar {
             CurrentInstructionAddress = -1;
         }
 
-        // visszatér az aktuális körben kiesett játékos nevével
+        /// <summary>
+        /// Végrehajtja a játék egy körét
+        /// </summary>
+        /// <returns>
+        /// A kieső játékos neve; ha ilyen nincs, akkor üres string
+        /// </returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public string Play() {
             if (Cycle < MaxCycles) {
                 Player currentPlayer = Players.Dequeue();
@@ -150,7 +209,12 @@ namespace CoreWar {
                 throw new InvalidOperationException("Vége a játéknak!");
             }
         }
-
+        /// <summary>
+        /// Utasítássorozat betöltése a memóriába
+        /// </summary>
+        /// <param name="program">A betöltendő utasítások listája</param>
+        /// <param name="start">Az első betöltendő utasítás kezdőcíme</param>
+        /// <param name="playerName">Az utasítássorozathoz tartozó játékos neve</param>
         public void LoadIntoMemory(List<Instruction> program, int start, string playerName) {
             for (int i = 0; i < program.Count; ++i) {
                 Memory[(start + i) % Memory.Count].Instruction = program[i];
@@ -158,6 +222,14 @@ namespace CoreWar {
             }
         }
 
+        /// <summary>
+        /// Megadott címen található memóriacella
+        /// </summary>
+        /// <param name="address">Az érintett memóriacím</param>
+        /// <param name="relative">Relatív (true) vagy abszolút (false) a memóriacím</param>
+        /// <returns>
+        /// A memóriacella
+        /// </returns>
         public MemoryCell MemoryCellAt(int address, bool relative) {
             if (relative) {
                 if (address + CurrentInstructionAddress < 0) {
@@ -169,6 +241,14 @@ namespace CoreWar {
             }
         }
 
+        /// <summary>
+        /// Megadott címen található utasítás
+        /// </summary>
+        /// <param name="address">Az érintett utasításcím</param>
+        /// <param name="relative">Relatív (true) vagy abszolút (false) az utasításcím</param>
+        /// <returns>
+        /// Az utasítás
+        /// </returns>
         public Instruction InstructionAt(int address, bool relative) {
             if (relative) {
                 if (address + CurrentInstructionAddress < 0) {
@@ -181,24 +261,30 @@ namespace CoreWar {
         }
 
         /// <summary>
-        /// Executes the instruction at the specified memory address.
+        /// Végrehajtja megadott memóriacímen található utasítást a megadott játékos nevében
         /// </summary>
+        /// <param name="memoryAddress">A soron következő utasításcím</param>
+        /// <param name="playerName">A végrehajtó harcos neve</param>
         /// <returns>
-        /// The array of integers representing the next memory addresses to execute. 
-        /// If the instruction results in termination, the array contains -1.
+        /// A végrehajtás után soron következő utasítások címei; érvénytelenül végrehajtott utasítás esetén [-1]
         /// </returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         public int[] ExecuteInstruction(int memoryAddress, string playerName = "player") {
             CurrentInstructionAddress = memoryAddress;
             Instruction currentInstruction = InstructionAt(memoryAddress, false);
             Instruction source = InstructionAt(currentInstruction.GetA(), true);
             Instruction target = InstructionAt(currentInstruction.GetB(), true);
             MemoryCell targetMemCell = MemoryCellAt(currentInstruction.GetB(), true);
+
+            // az utasítás műveletének függvényében folytatódik a végrehajtás
             switch (currentInstruction.OpCode) {
                 case OpCode.DAT:
+                    // adatszekciót nem hajtunk végre, így az érvénytelen
                     return [-1];
                 case OpCode.MOV:
                     targetMemCell.LastModifiedBy = playerName;
+
+                    // a módosítók határozzák meg, a forrás- és célcímek mely operandusára érvényesek a műveletek
                     switch (currentInstruction.Modifier) {
                         case OpModifier.A:
                             target.OpA.Copy(source.OpA);
@@ -340,6 +426,7 @@ namespace CoreWar {
                                 throw new ArgumentException("Helytelen módosító");
                         }
                         return [ModMemorySize(++memoryAddress)];
+                        // a 0-val való osztás érvénytelen
                     } catch (DivideByZeroException) {
                         return [-1];
                     }
@@ -373,6 +460,7 @@ namespace CoreWar {
                         }
                         return [ModMemorySize(++memoryAddress)];
                     } catch (DivideByZeroException) {
+                        // modulo 0 érvénytelen
                         return [-1];
                     }
                 case OpCode.JMP:
@@ -581,9 +669,8 @@ namespace CoreWar {
                 case OpCode.NOP:
                     return [ModMemorySize(++memoryAddress)];
                 default:
-                    throw new InvalidOperationException();
+                    throw new ArgumentException();
             }
-            throw new InvalidOperationException();
         }
 
         public override string ToString() {

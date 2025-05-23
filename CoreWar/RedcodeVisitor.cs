@@ -1,12 +1,19 @@
 using Antlr4.Runtime.Misc;
 
 namespace CoreWar {
+    /// <summary>
+    /// Az értelmezett Redcode szintaxisfájának bejárásáért felelős osztály
+    /// </summary>
     public class RedcodeVisitor : RedcodeBaseVisitor<object> {
-        Dictionary<string, int> labels = [];                         // címkék neve és sorsz�ma
+        Dictionary<string, int> labels = [];                         // címkék neve és sorszáma
         List<IncompleteInstruction> incompleteInstructions = [];     // hibás utasítások
         IncompleteInstruction? orgInstruction = null;
         int processStartOffset = 0, programLineNumber = 0;
         bool reachedEnd = false, lookingForFirstInstr = false;
+
+        /// <summary>
+        /// Teljes szintaxisfa bejárása
+        /// </summary>
         public override object VisitProgram([NotNull] RedcodeParser.ProgramContext context) {
             List<Instruction> process = [];                         // visszatérési érték első paramétere
             for (programLineNumber = 0; programLineNumber < context.line().Length && !reachedEnd; ++programLineNumber) {
@@ -46,10 +53,13 @@ namespace CoreWar {
                     procIdx++;
                 }
             }
-
             return (process, processStartOffset);
         }
 
+
+        /// <summary>
+        /// Egy utasítás szintaxisfájának bejárása
+        /// </summary>
         public override object VisitInstruction([NotNull] RedcodeParser.InstructionContext context) {
             if (context.label() != null) {
                 labels.Add(context.label().GetText().TrimEnd(':'), programLineNumber);

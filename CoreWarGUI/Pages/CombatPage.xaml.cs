@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 using Windows.UI;
 
 namespace CoreWarGUI {
+    /// <summary>
+    /// A játékteret megvalósító oldal XAML kódja mögötti logika
+    /// </summary>
     public sealed partial class CombatPage : Page {
         private VM vm;
 

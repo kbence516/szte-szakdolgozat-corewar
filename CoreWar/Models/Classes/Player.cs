@@ -1,11 +1,23 @@
 namespace CoreWar {
+    /// <summary>
+    /// Egy harcost reprezentáló osztály
+    /// </summary>
     public class Player {
+        /// <summary>
+        /// A virtuális memória, amelyben játszik
+        /// </summary>
         private readonly VM vm = VM.GetInstance();
 
-        public Queue<int> Processes {       // Kezdetben a kezdőutasítások sorszámai
+        /// <summary>
+        /// A játékos futó processzusainak sora; kezdetben mindig egyelemű
+        /// </summary>
+        public Queue<int> Processes {
             get; private set;
         }
 
+        /// <summary>
+        /// A harcos neve
+        /// </summary>
         public string Name {
             get; private set;
         }
@@ -19,7 +31,7 @@ namespace CoreWar {
         }
 
         /// <summary>
-        /// Végrehajtja a játékos soron következő utasítását.
+        /// Végrehajtja a játékos soron következő processzusának aktuális utasítását
         /// </summary>
         /// <returns>
         /// Ha a játékosnak még van élő processzusa, akkor igaz, különben hamis

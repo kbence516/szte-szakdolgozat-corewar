@@ -5,7 +5,7 @@ using System;
 
 namespace CoreWarGUI {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// A fõoldal XAML kódja mögötti logika
     /// </summary>
     public sealed partial class MainPage : Page {
         private readonly string logo;
