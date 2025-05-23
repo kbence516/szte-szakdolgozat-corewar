@@ -1,20 +1,42 @@
 using Antlr4.Runtime;
 
 namespace CoreWar {
+
+    /// <summary>
+    /// A Redcode betöltéséért felelõs osztály
+    /// </summary>
     public class RedcodeInputLoader {
 
-        public static int LoadFromFile(string path) {
+        /// <summary>
+        /// Redcode betöltése fájlból
+        /// </summary>
+        /// <param name="path">A fájl elérési útvonala</param>
+        /// <param name="playerName">A végrehajtó harcos neve</param>
+        /// <returns>Az elsõ, játékos által végrehajtható (offsetelt) utasítás memóriacíme</returns>
+        public static int LoadFromFile(string path, string playerName = "player") {
             AntlrInputStream inputStream = new(File.ReadAllText(path));
-            return Load(inputStream);
+            return Load(inputStream, playerName);
 
         }
 
-        public static int LoadFromInput(string input) {
+        /// <summary>
+        /// Redcode betöltése input stringbõl
+        /// </summary>
+        /// <param name="input">A bemeneti Redcode string</param>
+        /// <param name="playerName">A végrehajtó harcos neve</param>
+        /// <returns>Az elsõ, játékos által végrehajtható (offsetelt) utasítás memóriacíme</returns>
+        public static int LoadFromInput(string input, string playerName = "player") {
             AntlrInputStream inputStream = new(input);
-            return Load(inputStream);
+            return Load(inputStream, playerName);
         }
 
-        private static int Load(AntlrInputStream inputStream) {
+        /// <summary>
+        /// Redcode betöltése átalakított AntlrInputStreambõl
+        /// </summary>
+        /// <param name="inputStream">Az átalakított Redcode input</param>
+        /// <param name="playerName">A végrehajtó harcos neve</param>
+        /// <returns>Az elsõ, játékos által végrehajtható (offsetelt) utasítás memóriacíme</returns>
+        private static int Load(AntlrInputStream inputStream, string playerName) {
             Random random = new();
             VM vm = VM.GetInstance();
 
@@ -29,10 +51,10 @@ namespace CoreWar {
                 p.OpA.Value = vm.ModMemorySize(p.OpA.Value);
                 p.OpB.Value = vm.ModMemorySize(p.OpB.Value);
             });
-            int firstInstructionStart = vm.ModMemorySize(random.Next(vm.Memory.Length) + firstInstructionOffset);          // TODO: leellenõrizni, hogy van-e már ott valami a memóriában
-            vm.LoadIntoMemory(process, firstInstructionStart);
+            int firstInstructionStart = random.Next(vm.MemorySize);
+            vm.LoadIntoMemory(process, firstInstructionStart, playerName);
 
-            return firstInstructionStart;
+            return vm.ModMemorySize(firstInstructionStart + firstInstructionOffset);
         }
     }
 }

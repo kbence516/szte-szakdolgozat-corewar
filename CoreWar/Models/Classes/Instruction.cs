@@ -1,14 +1,31 @@
 namespace CoreWar {
+    /// <summary>
+    /// Teljes utasítások reprezentálására szolgáló osztály
+    /// </summary>
     public class Instruction {
+        /// <summary>
+        /// Az utasítás mûvelete
+        /// </summary>
         public OpCode OpCode {
             get; private set;
         }
+
+        /// <summary>
+        /// A mûvelet módosítója
+        /// </summary>
         public OpModifier Modifier {
             get; private set;
         }
+        /// <summary>
+        /// A operandus
+        /// </summary>
         public Operation OpA {
             get; private set;
         }
+
+        /// <summary>
+        /// A operandus
+        /// </summary>
         public Operation OpB {
             get; private set;
         }
@@ -20,6 +37,9 @@ namespace CoreWar {
             OpB = opB;
         }
 
+        /// <summary>
+        /// DAT.F #0, #0 utasítást létrehozó konstruktor
+        /// </summary>
         public Instruction() {
             OpCode = OpCode.DAT;
             Modifier = OpModifier.F;
@@ -27,6 +47,9 @@ namespace CoreWar {
             OpB = new Operation(AddressingMode.IMMEDIATE, 0);
         }
 
+        /// <summary>
+        /// A operandus értéke
+        /// </summary>
         public int GetA() {
             VM vm = VM.GetInstance();
             return OpA.Mode switch {
@@ -39,6 +62,9 @@ namespace CoreWar {
             };
         }
 
+        /// <summary>
+        /// B operandus értéke
+        /// </summary>
         public int GetB() {
             VM vm = VM.GetInstance();
             return OpB.Mode switch {
@@ -51,15 +77,19 @@ namespace CoreWar {
             };
         }
 
-        public void Copy(Instruction other) {
-            OpCode = other.OpCode;
-            Modifier = other.Modifier;
-            OpA.Copy(other.OpA);
-            OpB.Copy(other.OpB);
+        /// <summary>
+        /// Operandus értékeinek átmásolása egy forrás operandusból
+        /// </summary>
+        /// <param name="source">A forrás operandus</param>
+        public void Copy(Instruction source) {
+            OpCode = source.OpCode;
+            Modifier = source.Modifier;
+            OpA.Copy(source.OpA);
+            OpB.Copy(source.OpB);
         }
 
         public override string ToString() {
-            return $"{OpCode}.{Modifier}\t{OpA}\t{OpB}";
+            return $"{OpCode}.{Modifier}  {OpA}  {OpB}";
         }
 
         public override bool Equals(object? obj) {

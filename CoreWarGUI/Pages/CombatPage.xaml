@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="CoreWarGUI.CombatPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CoreWarGUI"
+    xmlns:corewar="using:CoreWar"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Margin="0 16">
+        <ScrollViewer x:Name="scrollViewer"   
+                IsVerticalScrollChainingEnabled="False"  
+                Padding="16"
+                Height="592">
+
+            <ScrollViewer.Resources>
+                <local:PlayerToColorBrushConverter x:Key="PlayerToColorBrushConverter"/>
+            </ScrollViewer.Resources>
+
+            <ItemsControl ItemsSource="{x:Bind vm.Memory}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid MaximumRowsOrColumns="100" Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="corewar:MemoryCell">
+                        <Rectangle Fill="{Binding LastModifiedBy, Converter={StaticResource PlayerToColorBrushConverter}}" Height="7" Width="7" Stroke="Black" StrokeThickness="1" ToolTipService.ToolTip="{Binding}">
+                        </Rectangle>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <StackPanel Spacing="16" HorizontalAlignment="Center">
+            <TextBlock HorizontalTextAlignment="Center">
+            <Run Text="Lejátszott körök:&#x0a;"></Run>
+            <Run Text="{x:Bind vm.Cycle, Mode=OneWay}"></Run>
+            <Run Text=" / "></Run>
+            <Run Text="{x:Bind vm.MaxCycles}"></Run>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <Button Width="150" x:Name="PlayButton" Click="PlayButton_Click" Content="Indítás"></Button>
+                <Button Width="150" x:Name="NextStepButton" Content="Következő lépés" Click="NextStepButton_Click"></Button>
+                <Button Width="300" x:Name="EndGameButton" Content="Vissza a főmenübe" Click="EndGameButton_Click" Visibility="Collapsed"></Button>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</Page>

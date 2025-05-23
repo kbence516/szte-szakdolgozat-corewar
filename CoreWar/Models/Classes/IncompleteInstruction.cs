@@ -1,17 +1,33 @@
 ﻿namespace CoreWar {
+    /// <summary>
+    /// A félkész utasítások reprezentálására szolgáló osztály
+    /// </summary>
     public class IncompleteInstruction {
 
+        /// <summary>
+        /// Az eredeti utasítás
+        /// </summary>
         public Instruction? Instruction {
             get; private set;
         }
 
+        /// <summary>
+        /// A hibás operandus ('A' vagy 'B')
+        /// </summary>
         public char WrongOperand {
             get; private set;
         }
+
+        /// <summary>
+        /// A behelyettesítendő címke
+        /// </summary>
         public string Label {
             get; private set;
         }
 
+        /// <summary>
+        /// Az utasítás sorának száma a Redcode-ban
+        /// </summary>
         public int? LineNumber {
             get; set;
         }
@@ -24,6 +40,8 @@
         }
 
         public override bool Equals(object? obj) {
+            // ha sima utasítással hasonltjuk össze, akkor csak
+            // a hibás operandus alapján vizsgáljuk az egyenlőséget
             if (obj is Instruction instruction) {
                 if (WrongOperand == 'A') {
                     return Instruction?.OpCode == instruction.OpCode &&

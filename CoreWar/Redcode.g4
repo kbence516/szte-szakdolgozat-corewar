@@ -4,7 +4,7 @@ program:        line* EOF;
 line:           comment
                 | WS* instruction NL
                 | instruction NL
-                | NL;
+                | WS* NL;
 comment:        ';' .*? NL;
 instruction:    label? WS* operation WS* adA? exprA? ','? WS* adB? exprB?;
 operation:      opcode '.' modifier | opcode;

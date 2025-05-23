@@ -5,6 +5,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <SelfContained>true</SelfContained>
+    <Platforms>AnyCPU;x64</Platforms>
+    <ApplicationIcon>MemFightLogo.ico</ApplicationIcon>
+    <Authors>Kovács Bence</Authors>
   </PropertyGroup>
 
 <ItemGroup>
@@ -22,5 +26,9 @@
       <Listener>True</Listener>
       <Visitor>True</Visitor>
     </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MemFightLogo.ico" />
   </ItemGroup>
 </Project>

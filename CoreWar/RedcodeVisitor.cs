@@ -1,12 +1,19 @@
 using Antlr4.Runtime.Misc;
 
 namespace CoreWar {
+    /// <summary>
+    /// Az értelmezett Redcode szintaxisfájának bejárásáért felelős osztály
+    /// </summary>
     public class RedcodeVisitor : RedcodeBaseVisitor<object> {
-        Dictionary<string, int> labels = [];                         // címkék neve és sorsz�ma
+        Dictionary<string, int> labels = [];                         // címkék neve és sorszáma
         List<IncompleteInstruction> incompleteInstructions = [];     // hibás utasítások
         IncompleteInstruction? orgInstruction = null;
         int processStartOffset = 0, programLineNumber = 0;
         bool reachedEnd = false, lookingForFirstInstr = false;
+
+        /// <summary>
+        /// Teljes szintaxisfa bejárása
+        /// </summary>
         public override object VisitProgram([NotNull] RedcodeParser.ProgramContext context) {
             List<Instruction> process = [];                         // visszatérési érték első paramétere
             for (programLineNumber = 0; programLineNumber < context.line().Length && !reachedEnd; ++programLineNumber) {
@@ -28,26 +35,31 @@ namespace CoreWar {
                 }
             }
 
+            int procIdx = 0;
             foreach (IncompleteInstruction incInstr in incompleteInstructions) {
-                for (int i = 0; i < process.Count; ++i) {
-                    if (incInstr.Equals(process[i])) {
+                while (procIdx < process.Count) {
+                    if (incInstr.Equals(process[procIdx])) {
                         if (!labels.ContainsKey(incInstr.Label)) {
                             throw new Exception($"Hiba: nincs {incInstr.Label} címke");
                         }
                         if (incInstr.WrongOperand == 'A') {
-                            process[i].OpA.Value = labels[incInstr.Label] - (int)incInstr.LineNumber;
+                            process[procIdx].OpA.Value = labels[incInstr.Label] - (int)incInstr.LineNumber;
                             break;
                         } else if (incInstr.WrongOperand == 'B') {
-                            process[i].OpB.Value = labels[incInstr.Label] - (int)incInstr.LineNumber;
+                            process[procIdx].OpB.Value = labels[incInstr.Label] - (int)incInstr.LineNumber;
                             break;
                         }
                     }
+                    procIdx++;
                 }
             }
-
             return (process, processStartOffset);
         }
 
+
+        /// <summary>
+        /// Egy utasítás szintaxisfájának bejárása
+        /// </summary>
         public override object VisitInstruction([NotNull] RedcodeParser.InstructionContext context) {
             if (context.label() != null) {
                 labels.Add(context.label().GetText().TrimEnd(':'), programLineNumber);
@@ -65,20 +77,10 @@ namespace CoreWar {
                 reachedEnd = true;
                 return null;
             }
-            if (opcode == OpCode.EQU) {
-                labels.Add(context.label().GetText(), int.Parse(context.exprA().GetText()));
-                return null;
-            }
             if (lookingForFirstInstr) {
                 orgInstruction.LineNumber = programLineNumber;
                 lookingForFirstInstr = false;
             }
-            OpModifier? modifier = null;
-            var modifierContext = context.operation().modifier();
-            if (modifierContext != null) {
-                modifier = (OpModifier)Enum.Parse(typeof(OpModifier), context.operation().modifier().GetText().ToUpper());
-            }
-
             AddressingMode? adA = null;
             var adAContext = context.adA();
             if (adAContext != null) {
@@ -93,7 +95,15 @@ namespace CoreWar {
             if (adBContext != null) {
                 adB = (AddressingMode)adBContext.GetText()[0];
             }
-
+            int valueB = 0;
+            if (adB == null) {
+                adB = AddressingMode.DIRECT;
+            }
+            OpModifier? modifier = null;
+            var modifierContext = context.operation().modifier();
+            if (modifierContext != null) {
+                modifier = (OpModifier)Enum.Parse(typeof(OpModifier), context.operation().modifier().GetText().ToUpper());
+            }
             if (modifier == null) {
                 switch (opcode) {
                     case OpCode.DAT:
@@ -147,7 +157,6 @@ namespace CoreWar {
             try {
                 valueA = int.Parse(context.exprA().GetText());
             } catch (FormatException) {
-                valueA = 0;
                 IncompleteInstruction incInstr = new IncompleteInstruction(
                     new Instruction(opcode, (OpModifier)modifier, new Operation((AddressingMode)adA, valueA), null),
                     'A',
@@ -157,15 +166,13 @@ namespace CoreWar {
                 incompleteInstructions.Add(incInstr);
             }
 
-            int? valueB = null;
             var valueBContext = context.exprB();
             if (valueBContext != null) {
                 try {
                     valueB = int.Parse(valueBContext.GetText());
                 } catch (FormatException) {
-                    valueB = 0;
                     IncompleteInstruction incInstr = new IncompleteInstruction(
-                        new Instruction(opcode, (OpModifier)modifier, new Operation((AddressingMode)adA, valueA), new Operation(adB ?? AddressingMode.DIRECT, (int)valueB)),
+                        new Instruction(opcode, (OpModifier)modifier, new Operation((AddressingMode)adA, valueA), new Operation((AddressingMode)adB, valueB)),
                         'B',
                         context.exprB().GetText(),
                         programLineNumber
@@ -174,15 +181,11 @@ namespace CoreWar {
                 }
             }
 
-            if (valueB != null && adB == null) {
-                adB = AddressingMode.DIRECT;
-            }
-
             Instruction instruction = new Instruction(
                 opcode,
                 (OpModifier)modifier,
                 new Operation((AddressingMode)adA, valueA),
-                adB != null ? new Operation((AddressingMode)adB, valueB ?? 0) : new Operation(AddressingMode.DIRECT, 0)
+                new Operation((AddressingMode)adB, valueB)
                 );
 
             return instruction;
