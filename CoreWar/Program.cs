@@ -1,4 +1,7 @@
 ﻿namespace CoreWar {
+    /// <summary>
+    /// A CLI alkalmazás fő osztálya
+    /// </summary>
     public class Program {
         private static int memorySize = 8000;
         private static int maxCycles = 80000;
@@ -6,6 +9,9 @@
         private static int warriors = 2;
         private static VM vm;
 
+        /// <summary>
+        /// A CLI belépési pontja
+        /// </summary>
         public static void Main(string[] args) {
             Console.WriteLine(Utils.GetLogo());
 
@@ -166,6 +172,9 @@
             PlayGame();
         }
 
+        /// <summary>
+        /// A játék végrehajtásáért felelős metódus
+        /// </summary>
         private static void PlayGame() {
             bool isPlaying = true;
             while (true) {
@@ -284,6 +293,9 @@
             }
         }
 
+        /// <summary>
+        /// A játék elindítása utáni parancsok kiírása
+        /// </summary>
         private static void GetGameHelp() {
             Console.WriteLine("\nJáték közben elérhető utasítások:");
             Console.WriteLine("\t n(ext)\t\t\t\tKövetkező lépés");
@@ -297,10 +309,17 @@
             Console.WriteLine("\t e(xit)\t\t\t\tKilépés a játékból");
         }
 
+        /// <summary>
+        /// A felhasználó értesítése a hibás paraméterekről
+        /// </summary>
         private static void GetErrorMessage() {
             Console.WriteLine("Helytelen használat!");
             GetLongHelp();
         }
+
+        /// <summary>
+        /// Rövid segítség kiírása
+        /// </summary>
         private static void GetShortHelp() {
             Console.WriteLine("Helyes használat:");
             Console.WriteLine($"\t{System.AppDomain.CurrentDomain.FriendlyName} <redcode_1> <redcode_2>");
@@ -309,6 +328,9 @@
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// Részletes segítség kiírása
+        /// </summary>
         private static void GetLongHelp() {
             Console.WriteLine("Helyes használat:");
             Console.WriteLine($"\t{System.AppDomain.CurrentDomain.FriendlyName} [--memorySize <n>] [--maxCycles <n>] [--maxProcesses <n>] [--warriors <wn>] <redcode_1> <redcode_2> [... <redcode_wn>]\n");

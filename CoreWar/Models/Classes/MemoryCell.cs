@@ -1,10 +1,20 @@
 ﻿using System.ComponentModel;
 
 namespace CoreWar {
+    /// <summary>
+    /// A memória egy celláját reprezentáló osztály
+    /// </summary>
     public class MemoryCell : INotifyPropertyChanged {
+        /// <summary>
+        /// A cella sorszáma a memóriában
+        /// </summary>
         public int Index { get; private set; }
 
         private Instruction _instruction;
+
+        /// <summary>
+        /// A memóriában tárolt utasítás
+        /// </summary>
         public Instruction Instruction {
             get => _instruction;
             set {
@@ -15,6 +25,9 @@ namespace CoreWar {
 
         private string _lastModifiedBy;
 
+        /// <summary>
+        /// Annak a játékosnak a neve, aki legutóbb módosította a cellát
+        /// </summary>
         public string LastModifiedBy {
             get => _lastModifiedBy;
             set {
@@ -34,6 +47,10 @@ namespace CoreWar {
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// A GUI frissítéséért felelős metódus
+        /// </summary>
         private void OnPropertyChanged(string propName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
     }
